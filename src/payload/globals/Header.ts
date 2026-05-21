@@ -1,5 +1,5 @@
 import { GlobalConfig } from "payload";
-import { revalidateHook } from "@/payload/globals/revalidateHook";
+import { revalidateGlobalHook } from "@/payload/globals/revalidateHook";
 
 /**
  * Payload CMS Global configuration for the site Header.
@@ -12,7 +12,7 @@ export const Header: GlobalConfig = {
     group: "Global",
   },
   hooks: {
-    afterChange: [revalidateHook("header")],
+    afterChange: [revalidateGlobalHook("header")],
   },
   fields: [
     {

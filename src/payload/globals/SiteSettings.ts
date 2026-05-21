@@ -1,5 +1,5 @@
 import { GlobalConfig } from "payload";
-import { revalidateHook } from "@/payload/globals/revalidateHook";
+import { revalidateGlobalHook } from "@/payload/globals/revalidateHook";
 
 /**
  * Payload CMS Global configuration for general Site Settings.
@@ -12,7 +12,7 @@ export const SiteSettings: GlobalConfig = {
     group: "Settings",
   },
   hooks: {
-    afterChange: [revalidateHook("site-settings")],
+    afterChange: [revalidateGlobalHook("site-settings")],
   },
   fields: [
     { name: "siteUrl", type: "text", required: true },

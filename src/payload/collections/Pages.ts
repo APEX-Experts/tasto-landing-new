@@ -12,6 +12,7 @@ import { AboutProblem } from "../blocks/AboutProblem";
 import { AboutPhilosophy } from "../blocks/AboutPhilosophy";
 import { AboutCTA } from "../blocks/AboutCTA";
 import { CompanyExpertise } from "../blocks/CompanyExpertise";
+import { revalidatePageHook } from "../globals/revalidateHook";
 
 /**
  * Payload CMS Collection configuration for dynamic Pages.
@@ -25,6 +26,9 @@ export const Pages: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePageHook],
   },
   fields: [
     {

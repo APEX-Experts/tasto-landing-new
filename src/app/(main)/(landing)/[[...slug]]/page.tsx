@@ -4,6 +4,13 @@ import type { Metadata } from "next";
 import { RenderBlocks } from "@/components/landing/blocks/RenderBlocks";
 
 /**
+ * Enable Incremental Static Regeneration. Pages are statically generated at build time
+ * and revalidated on-demand via revalidatePath (triggered by Payload afterChange hooks),
+ * or at most every 60 seconds as a fallback.
+ */
+export const revalidate = 60;
+
+/**
  * Props for the dynamic page route.
  */
 type Props = {
