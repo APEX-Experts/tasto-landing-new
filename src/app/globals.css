@@ -64,6 +64,8 @@
 }
 
 :root {
+  --tasto-cyan-rgb: 49, 216, 203;
+  --tasto-blue-rgb: 0, 58, 159;
   --background: var(--tasto-white);
   --foreground: var(--tasto-black);
   --card: var(--tasto-white);

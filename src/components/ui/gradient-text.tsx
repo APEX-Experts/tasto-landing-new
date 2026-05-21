@@ -5,7 +5,7 @@ interface GradientTextProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
   className?: string;
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span" | "div";
-  variant?: "dark" | "light";
+  variant?: "dark" | "light" | "blue";
 }
 
 export function GradientText({
@@ -15,14 +15,15 @@ export function GradientText({
   variant = "dark",
   ...props
 }: GradientTextProps) {
-  const isLight = variant === "light";
   return (
     <Component
       className={cn(
-        "bg-clip-text text-transparent",
-        isLight
-          ? "bg-linear-to-br from-black to-black/80"
-          : "bg-linear-to-br from-white to-white/80",
+        "bg-clip-text text-transparent bg-linear-to-br",
+        variant === "light"
+          ? "from-black to-black/80"
+          : variant === "dark"
+            ? "from-white to-white/80"
+            : "from-tasto-blue to-tasto-blue/60",
         className,
       )}
       {...props}

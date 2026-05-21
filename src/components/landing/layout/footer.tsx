@@ -61,15 +61,21 @@ export function Footer({
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full border-t bg-background">
-      <div className="container mx-auto px-4 md:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+    <footer className="relative w-full border-t border-tasto-white/10 bg-tasto-bg text-tasto-white overflow-x-clip">
+      {/* Subtle ambient cyan glow */}
+      <div className="overflow-hidden absolute inset-0">
+        <div className="pointer-events-none absolute -bottom-48 -right-32 h-[400px] w-[400px] rounded-full bg-tasto-cyan/10 blur-[120px]" />
+      </div>
+      <div className="pointer-events-none absolute -top-32 -left-32 h-[300px] w-[300px] rounded-full bg-tasto-cyan/5 blur-[90px]" />
+
+      <div className="container relative z-10 mx-auto px-4 md:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 max-md:items-center max-md:text-center gap-12">
           {/* Brand & Info */}
           <div className="md:col-span-1 space-y-6">
-            <div className="space-y-4">
+            <div className="space-y-4 flex items-center justify-center flex-col">
               <Logo brandName={brandName} logoImage={logoImage} logoSvg={logoSvg} />
               {description && (
-                <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+                <p className="text-sm text-tasto-white/60 leading-relaxed">{description}</p>
               )}
             </div>
 
@@ -82,7 +88,7 @@ export function Footer({
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-tasto-white/60 hover:text-tasto-cyan transition-colors"
                     title={social.label}
                   >
                     <span
@@ -99,11 +105,11 @@ export function Footer({
           {/* Dynamic Link Columns */}
           {columns.map((col) => (
             <div key={col.title} className="space-y-4">
-              <h4 className="font-medium text-sm">{col.title}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h4 className="font-semibold text-sm text-tasto-white">{col.title}</h4>
+              <ul className="space-y-2 text-sm text-tasto-white/60">
                 {col.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="hover:text-foreground transition-colors">
+                    <Link href={link.href} className="hover:text-tasto-cyan transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -114,7 +120,7 @@ export function Footer({
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground space-y-4 md:space-y-0">
+        <div className="mt-12 pt-8 border-t border-tasto-white/10 flex flex-col md:flex-row justify-between items-center text-xs text-tasto-white/40 space-y-4 md:space-y-0">
           <p>
             © {currentYear} {brandName}. All rights reserved.
           </p>
@@ -123,7 +129,7 @@ export function Footer({
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-foreground transition-colors"
+                className="hover:text-tasto-cyan transition-colors"
               >
                 {link.iconSvg ? (
                   <span

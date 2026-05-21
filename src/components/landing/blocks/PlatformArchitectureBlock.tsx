@@ -1,11 +1,16 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
 import React from "react";
+import { motion } from "motion/react";
 
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { SectionDescription } from "@/components/ui/section-description";
 import { SectionHeading } from "@/components/ui/section-heading";
 import type { PlatformArchitecture as PlatformArchitectureType } from "@/payload-types";
 import Eyebrow from "../layout/eyebrow";
+import { BrandText } from "../layout/brand-formatter";
+import { SectionReveal } from "@/components/ui/section-reveal";
 
 interface PillarCardProps {
   title: string;
@@ -17,12 +22,71 @@ interface PillarCardProps {
   index: number;
 }
 
+// Staggered layout variants
+const gridVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const pillarVariants = {
+  hidden: { opacity: 0, y: 35 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const, // easeOutExpo
+    },
+  },
+};
+
+const introVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+const moduleListVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const moduleItemVariants = {
+  hidden: { opacity: 0, x: -10 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
 /**
  * Individual operational pillar card.
  */
 const PillarCard: React.FC<PillarCardProps> = ({ title, description, modules, index }) => {
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-tasto-white/10 bg-linear-to-b from-tasto-white/4 to-transparent p-8 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-tasto-cyan/30 hover:shadow-[0_0_40px_-15px_rgba(var(--tasto-cyan-rgb,0,255,255),0.15)]">
+    <motion.div
+      variants={pillarVariants}
+      className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-tasto-white/10 bg-linear-to-b from-tasto-white/4 to-transparent p-8 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-tasto-cyan/30 hover:shadow-[0_0_40px_-15px_rgba(var(--tasto-cyan-rgb,0,255,255),0.15)]"
+    >
       {/* Top Edge Highlight */}
       <div className="absolute inset-x-0 top-0 h-px w-full bg-linear-to-r from-transparent via-tasto-white/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
@@ -48,10 +112,11 @@ const PillarCard: React.FC<PillarCardProps> = ({ title, description, modules, in
       </div>
 
       {/* Modules List */}
-      <div className="relative z-10 mt-10 space-y-3">
+      <motion.div variants={moduleListVariants} className="relative z-10 mt-10 space-y-3">
         {modules?.map((module) => (
-          <div
+          <motion.div
             key={module.id}
+            variants={moduleItemVariants}
             className="group/module relative flex items-center justify-between rounded-2xl border border-transparent bg-tasto-white/2 px-5 py-4 transition-all duration-300 hover:border-tasto-cyan/20 hover:bg-tasto-cyan/3"
           >
             <div className="flex items-center gap-3">
@@ -63,10 +128,10 @@ const PillarCard: React.FC<PillarCardProps> = ({ title, description, modules, in
             </div>
 
             <ArrowRight className="h-4 w-4 text-tasto-white/10 transition-all duration-300 group-hover/module:translate-x-1 group-hover/module:text-tasto-cyan" />
-          </div>
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -80,13 +145,19 @@ export const PlatformArchitectureBlock: React.FC<PlatformArchitectureType> = ({
   pillars,
 }) => {
   return (
-    <section className="relative bg-tasto-bg py-24">
+    <section className="relative bg-tasto-bg py-24" id="platform">
       {/* Architectural Grid Background */}
       <GridPattern />
 
-      <div className="container relative z-10 mx-auto px-4">
+      <SectionReveal className="container relative z-10 mx-auto px-4">
         {/* Section Intro */}
-        <div className="mx-auto max-w-4xl text-center">
+        <motion.div
+          variants={introVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="mx-auto max-w-4xl text-center"
+        >
           {/* Eyebrow */}
           {eyebrow && <Eyebrow className="mb-8">{eyebrow}</Eyebrow>}
 
@@ -94,11 +165,19 @@ export const PlatformArchitectureBlock: React.FC<PlatformArchitectureType> = ({
           <SectionHeading>{heading}</SectionHeading>
 
           {/* Description */}
-          <SectionDescription className="mx-auto mt-8 max-w-2xl">{description}</SectionDescription>
-        </div>
+          <SectionDescription className="mx-auto mt-8 max-w-2xl">
+            <BrandText text={description} logoClassName="mr-1" />
+          </SectionDescription>
+        </motion.div>
 
         {/* Pillars Grid */}
-        <div className="mt-24 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="mt-24 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+        >
           {pillars?.map((pillar, index) => (
             <PillarCard
               key={pillar.id}
@@ -108,8 +187,8 @@ export const PlatformArchitectureBlock: React.FC<PlatformArchitectureType> = ({
               index={index}
             />
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </SectionReveal>
     </section>
   );
 };

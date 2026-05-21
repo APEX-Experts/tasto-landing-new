@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { motion } from "motion/react";
 
 import type { OperationalGovernance as OperationalGovernanceType } from "@/payload-types";
 import Eyebrow from "../layout/eyebrow";
@@ -7,6 +10,77 @@ import { SectionDescription } from "@/components/ui/section-description";
 import { LucideIcon } from "@/components/ui/lucide-icon";
 import { BrandText } from "../layout/brand-formatter";
 import { AmbientGlows } from "@/components/ui/ambient-glows";
+import { SectionReveal } from "@/components/ui/section-reveal";
+
+// Animation Variants
+const introVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+const leftStackVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const capabilityVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+const rightPanelVariants = {
+  hidden: { opacity: 0, x: 30, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 1,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+const metricsGridVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.4,
+    },
+  },
+};
+
+const metricItemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
 
 export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = ({
   eyebrow,
@@ -31,7 +105,7 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
         ];
 
   return (
-    <section className="relative bg-tasto-bg pb-24">
+    <section className="relative bg-tasto-bg pb-24 overflow-x-clip overflow-y-visible">
       {/* Restrained Ambient Glow - Less flashy, more executive */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-30">
         <div className="absolute right-0 top-1/4 h-[800px] w-[800px] translate-x-1/3 rounded-full bg-tasto-cyan/5 blur-[150px]" />
@@ -39,9 +113,15 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
 
       <AmbientGlows />
 
-      <div className="container relative z-10 mx-auto px-4">
+      <SectionReveal className="container relative z-10 mx-auto px-4">
         {/* TOP INTRO */}
-        <div className="mb-20 max-w-3xl mx-auto text-center flex flex-col items-center">
+        <motion.div
+          variants={introVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="mb-20 max-w-5xl mx-auto text-center flex flex-col items-center"
+        >
           {eyebrow && (
             <Eyebrow variant="cyan" className="mb-6">
               {eyebrow}
@@ -50,19 +130,28 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
 
           <SectionHeading>{heading}</SectionHeading>
 
-          <SectionDescription className="mt-6 sm:text-xl">{description}</SectionDescription>
-        </div>
+          <SectionDescription className="mt-6 sm:text-xl">
+            <BrandText text={description} logoClassName="mr-1" />
+          </SectionDescription>
+        </motion.div>
 
         {/* BOTTOM SPLIT LAYOUT */}
         <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
           {/* LEFT: Capabilities Stack */}
-          <div className="flex flex-col">
+          <motion.div
+            variants={leftStackVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            className="flex flex-col"
+          >
             {/* Top Border for the stack */}
             <div className="h-px w-full bg-tasto-white/10" />
 
             {capabilities?.map((capability, index) => (
-              <div
+              <motion.div
                 key={index}
+                variants={capabilityVariants}
                 className="group relative flex flex-col justify-center items-center md:items-start text-center md:text-start border-b border-tasto-white/10 py-10 transition-colors duration-500 hover:border-tasto-cyan/30"
               >
                 {/* Subtle left-edge active indicator */}
@@ -82,12 +171,18 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
                 <p className="max-w-md text-base leading-relaxed text-tasto-white/60">
                   {capability.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* RIGHT: Massive Governance Panel */}
-          <div className="relative flex w-full flex-col justify-between overflow-hidden rounded-[2.5rem] border border-tasto-white/10 bg-linear-to-b from-tasto-white/4 to-tasto-white/1 p-10 shadow-2xl backdrop-blur-xl lg:p-14">
+          <motion.div
+            variants={rightPanelVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            className="relative flex w-full flex-col justify-between overflow-hidden rounded-[2.5rem] border border-tasto-white/10 bg-linear-to-b from-tasto-white/4 to-tasto-white/1 p-10 shadow-2xl backdrop-blur-xl lg:p-14"
+          >
             {/* Panel Top Highlight */}
             <div className="absolute inset-x-0 top-0 h-px w-full bg-linear-to-r from-transparent via-tasto-white/20 to-transparent opacity-50" />
 
@@ -134,12 +229,16 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
             </div>
 
             {/* Footer: Operational Status Metrics */}
-            <div className="grid grid-cols-2 gap-4 border-t border-tasto-white/10 pt-8 sm:grid-cols-3">
+            <motion.div
+              variants={metricsGridVariants}
+              className="grid grid-cols-2 gap-4 border-t border-tasto-white/10 pt-8 sm:grid-cols-3"
+            >
               {displayMetrics.map((metric, idx) => {
                 const isLast = idx === 2;
                 return (
-                  <div
+                  <motion.div
                     key={idx}
+                    variants={metricItemVariants}
                     className={`flex flex-col gap-2 ${isLast ? "col-span-2 sm:col-span-1" : ""}`}
                   >
                     <LucideIcon
@@ -156,13 +255,13 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
                     >
                       {metric.value}
                     </span>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </div>
+      </SectionReveal>
     </section>
   );
 };

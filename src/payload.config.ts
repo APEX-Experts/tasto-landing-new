@@ -1,23 +1,23 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { s3Storage } from "@payloadcms/storage-s3";
 import path from "path";
-import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import sharp from "sharp";
-import { Users } from "./payload/collections/Users.ts";
+import { fileURLToPath } from "url";
+import { Hero } from "./payload/blocks/Hero.ts";
+import { OperationalGovernance } from "./payload/blocks/OperationalGovernance.ts";
+import { PlatformArchitecture } from "./payload/blocks/PlatformArchitecture.ts";
+import { ProblemSection } from "./payload/blocks/ProblemSection.ts";
+import { StrategicTrust } from "./payload/blocks/StrategicTrust.ts";
 import { Media } from "./payload/collections/Media.ts";
 import { Pages } from "./payload/collections/Pages.ts";
 import { Posts } from "./payload/collections/Posts.ts";
-import { SiteSettings } from "./payload/globals/SiteSettings.ts";
-import { Header } from "./payload/globals/Header.ts";
+import { Users } from "./payload/collections/Users.ts";
 import { Footer } from "./payload/globals/Footer.ts";
-import { s3Storage } from "@payloadcms/storage-s3";
-import { Hero } from "./payload/blocks/Hero.ts";
-import { Features } from "./payload/blocks/Features.ts";
+import { Header } from "./payload/globals/Header.ts";
+import { SiteSettings } from "./payload/globals/SiteSettings.ts";
 import { CTA } from "./payload/blocks/CTA.ts";
-import { ProblemSection } from "./payload/blocks/ProblemSection.ts";
-import { PlatformArchitecture } from "./payload/blocks/PlatformArchitecture.ts";
-import { OperationalGovernance } from "./payload/blocks/OperationalGovernance.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -66,5 +66,5 @@ export default buildConfig({
         ]
       : []),
   ],
-  blocks: [Hero, Features, CTA, ProblemSection, PlatformArchitecture, OperationalGovernance],
+  blocks: [Hero, CTA, ProblemSection, PlatformArchitecture, OperationalGovernance, StrategicTrust],
 });

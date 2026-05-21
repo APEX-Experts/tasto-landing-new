@@ -8,7 +8,7 @@ export function FullLogo({ className = "" }: LogoProps) {
   );
 
   return (
-    <div
+    <span
       className={`${
         hasDisplayClass ? "" : "flex"
       } items-center group relative pointer-events-none select-none w-fit ${className}`}
@@ -19,6 +19,6 @@ export function FullLogo({ className = "" }: LogoProps) {
       <span className="pointer-events-none absolute top-[-0.3em] right-[0.2em] w-[0.06em] h-[0.3em] rounded-3xl bg-current" />
       <span className="pointer-events-none absolute top-[-0.05em] right-[-0.15em] w-[0.06em] h-[0.3em] rounded-3xl bg-current rotate-90" />
       <span className="pointer-events-none absolute top-[-0.25em] right-[-0.03em] w-[0.06em] h-[0.3em] rounded-3xl bg-current rotate-45" />
-    </div>
+    </span>
   );
 }

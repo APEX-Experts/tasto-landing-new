@@ -1,9 +1,11 @@
 import type { Page } from "@/payload-types";
 import React from "react";
+import { CTABlock } from "./CTABlock";
 import { HeroBlock } from "./HeroBlock";
 import { OperationalGovernanceBlock } from "./OperationalGovernanceBlock";
 import { PlatformArchitectureBlock } from "./PlatformArchitectureBlock";
 import { ProblemSectionBlock } from "./ProblemSectionBlock";
+import { StrategicTrustBlock } from "./StrategicTrustBlock";
 
 /**
  * Props for the RenderBlocks component.
@@ -38,16 +40,19 @@ export const RenderBlocks: React.FC<Props> = ({ blocks }) => {
         switch (block.blockType) {
           case "hero":
             return <HeroBlock key={key} {...block} />;
-
           case "problem-section":
             return <ProblemSectionBlock key={key} {...block} />;
           case "platform-architecture":
             return <PlatformArchitectureBlock key={key} {...block} />;
           case "operational-governance":
             return <OperationalGovernanceBlock key={key} {...block} />;
+          case "strategic-trust":
+            return <StrategicTrustBlock key={key} {...block} />;
+          case "cta":
+            return <CTABlock key={key} {...block} />;
           default:
             return (
-              <section key={index} className="container mx-auto py-12 px-4">
+              <section key={key} className="container mx-auto py-12 px-4">
                 <div className="p-8 border-2 border-dashed rounded-lg bg-destructive/5 text-destructive text-center">
                   <p className="font-semibold">Missing Component Mapping</p>
                   <p className="text-sm opacity-80">

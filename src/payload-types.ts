@@ -67,11 +67,11 @@ export interface Config {
   };
   blocks: {
     hero: Hero;
-    features: Features;
     cta: Cta;
     'problem-section': ProblemSection;
     'platform-architecture': PlatformArchitecture;
     'operational-governance': OperationalGovernance;
+    'strategic-trust': StrategicTrust;
   };
   collections: {
     users: User;
@@ -296,56 +296,16 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "features".
- */
-export interface Features {
-  features: {
-    icon?:
-      | (
-          | 'zap'
-          | 'shield'
-          | 'rocket'
-          | 'star'
-          | 'heart'
-          | 'settings'
-          | 'check'
-          | 'users'
-          | 'globe'
-          | 'code'
-          | 'bar-chart'
-          | 'layers'
-          | 'layout'
-          | 'message-square'
-          | 'mouse-pointer'
-          | 'phone'
-          | 'search'
-          | 'send'
-          | 'share'
-          | 'shopping-cart'
-          | 'smile'
-          | 'target'
-          | 'thumbs-up'
-          | 'trending-up'
-          | 'video'
-        )
-      | null;
-    title: string;
-    description: string;
-    id?: string | null;
-  }[];
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'features';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "cta".
  */
 export interface Cta {
+  eyebrow?: string | null;
   heading: string;
-  text?: string | null;
-  buttonLabel: string;
-  buttonLink: string;
+  description: string;
+  primaryButtonLabel: string;
+  primaryButtonLink: string;
+  secondaryButtonLabel?: string | null;
+  secondaryButtonLink?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
@@ -501,6 +461,24 @@ export interface OperationalGovernance {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "strategic-trust".
+ */
+export interface StrategicTrust {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  metrics: {
+    value: string;
+    label: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'strategic-trust';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -643,49 +621,13 @@ export interface Page {
         blockType: 'hero';
       }
     | {
-        features: {
-          icon?:
-            | (
-                | 'zap'
-                | 'shield'
-                | 'rocket'
-                | 'star'
-                | 'heart'
-                | 'settings'
-                | 'check'
-                | 'users'
-                | 'globe'
-                | 'code'
-                | 'bar-chart'
-                | 'layers'
-                | 'layout'
-                | 'message-square'
-                | 'mouse-pointer'
-                | 'phone'
-                | 'search'
-                | 'send'
-                | 'share'
-                | 'shopping-cart'
-                | 'smile'
-                | 'target'
-                | 'thumbs-up'
-                | 'trending-up'
-                | 'video'
-              )
-            | null;
-          title: string;
-          description: string;
-          id?: string | null;
-        }[];
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'features';
-      }
-    | {
+        eyebrow?: string | null;
         heading: string;
-        text?: string | null;
-        buttonLabel: string;
-        buttonLink: string;
+        description: string;
+        primaryButtonLabel: string;
+        primaryButtonLink: string;
+        secondaryButtonLabel?: string | null;
+        secondaryButtonLink?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'cta';
@@ -826,6 +768,20 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'operational-governance';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        metrics: {
+          value: string;
+          label: string;
+          description?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'strategic-trust';
       }
   )[];
   updatedAt: string;
@@ -1065,27 +1021,16 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        features?:
-          | T
-          | {
-              features?:
-                | T
-                | {
-                    icon?: T;
-                    title?: T;
-                    description?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
         cta?:
           | T
           | {
+              eyebrow?: T;
               heading?: T;
-              text?: T;
-              buttonLabel?: T;
-              buttonLink?: T;
+              description?: T;
+              primaryButtonLabel?: T;
+              primaryButtonLink?: T;
+              secondaryButtonLabel?: T;
+              secondaryButtonLink?: T;
               id?: T;
               blockName?: T;
             };
@@ -1152,6 +1097,23 @@ export interface PagesSelect<T extends boolean = true> {
                     title?: T;
                     value?: T;
                     icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'strategic-trust'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              metrics?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    description?: T;
                     id?: T;
                   };
               id?: T;

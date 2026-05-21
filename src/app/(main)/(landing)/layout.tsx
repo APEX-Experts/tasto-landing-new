@@ -66,11 +66,7 @@ export default async function LandingLayout({
         routes={navRoutes}
         actionSlot={
           header.actionButton?.isEnabled ? (
-            <Button
-              asChild
-              size="sm"
-              className="border border-tasto-cyan/50 bg-tasto-cyan/10 text-tasto-cyan hover:bg-tasto-cyan/20 transition-all duration-300 shadow-[0_0_15px_-3px_rgba(49,216,203,0.3)] hover:shadow-[0_0_20px_-1px_rgba(49,216,203,0.5)] rounded-lg font-medium text-xs h-9 px-4"
-            >
+            <Button asChild size="lg" variant="dark-default" className="px-4 text-xs font-medium">
               <Link href={header.actionButton.link || "#"}>{header.actionButton.label}</Link>
             </Button>
           ) : null

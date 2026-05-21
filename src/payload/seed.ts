@@ -1,8 +1,8 @@
-import { getPayload } from "payload";
-import config from "../payload.config.ts";
-import path from "path";
-import { fileURLToPath } from "url";
 import "dotenv/config";
+import path from "path";
+import { getPayload } from "payload";
+import { fileURLToPath } from "url";
+import config from "../payload.config.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,33 +64,6 @@ async function seed() {
               style: "secondary",
             },
           ],
-        },
-        {
-          blockType: "features",
-          features: [
-            {
-              icon: "zap",
-              title: "Lightning Fast",
-              description: "Built with Next.js 15 and React 19 for ultimate performance.",
-            },
-            {
-              icon: "shield",
-              title: "Secure by Default",
-              description: "Payload CMS provides robust security and access control.",
-            },
-            {
-              icon: "rocket",
-              title: "Scalable",
-              description: "Easily scale your application to millions of users.",
-            },
-          ],
-        },
-        {
-          blockType: "cta",
-          heading: "Ready to build something amazing?",
-          text: "Start your journey with our comprehensive starter kit today.",
-          buttonLabel: "Contact Us",
-          buttonLink: "/contact",
         },
       ],
     },

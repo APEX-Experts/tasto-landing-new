@@ -1,34 +1,64 @@
+// src/payload/blocks/FinalCTA.ts
+
 import { Block } from "payload";
 
 /**
- * Payload CMS Block configuration for the Call-to-Action (CTA) section.
- * Includes fields for heading, text, and a primary action button.
+ * Final CTA Section
+ * Closing enterprise call-to-action.
  */
 export const CTA: Block = {
   slug: "cta",
+
   labels: {
     singular: "CTA",
     plural: "CTAs",
   },
+
   fields: [
+    {
+      name: "eyebrow",
+      type: "text",
+      defaultValue: "Transform Operations",
+    },
+
     {
       name: "heading",
       type: "text",
       required: true,
     },
+
     {
-      name: "text",
+      name: "description",
       type: "textarea",
-    },
-    {
-      name: "buttonLabel",
-      type: "text",
       required: true,
     },
+
     {
-      name: "buttonLink",
+      name: "primaryButtonLabel",
       type: "text",
       required: true,
+      defaultValue: "Request a Demo",
+    },
+
+    {
+      name: "primaryButtonLink",
+      type: "text",
+      required: true,
+      defaultValue: "/contact",
+    },
+
+    {
+      name: "secondaryButtonLabel",
+      type: "text",
+      required: false,
+      defaultValue: "Explore the Platform",
+    },
+
+    {
+      name: "secondaryButtonLink",
+      type: "text",
+      required: false,
+      defaultValue: "/platform",
     },
   ],
 };

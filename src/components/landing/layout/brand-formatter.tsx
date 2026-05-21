@@ -7,14 +7,11 @@ interface BrandTextProps {
   logoClassName?: string;
 }
 
-export function BrandText({
-  text,
-  className = "font-display",
-  logoClassName = "",
-}: BrandTextProps) {
+export function BrandText({ text, className = "", logoClassName = "" }: BrandTextProps) {
   if (!text) return null;
 
   const parts = text.split(/(TASTO)/g);
+  console.log(parts);
 
   return (
     <>

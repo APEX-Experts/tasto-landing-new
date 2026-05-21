@@ -1,10 +1,10 @@
 import { CollectionConfig } from "payload";
 import { Hero } from "../blocks/Hero";
-import { Features } from "../blocks/Features";
-import { CTA } from "../blocks/CTA";
-import { ProblemSection } from "../blocks/ProblemSection";
-import { PlatformArchitecture } from "../blocks/PlatformArchitecture";
 import { OperationalGovernance } from "../blocks/OperationalGovernance";
+import { PlatformArchitecture } from "../blocks/PlatformArchitecture";
+import { ProblemSection } from "../blocks/ProblemSection";
+import { StrategicTrust } from "../blocks/StrategicTrust";
+import { CTA } from "../blocks/CTA";
 
 /**
  * Payload CMS Collection configuration for dynamic Pages.
@@ -54,7 +54,14 @@ export const Pages: CollectionConfig = {
     {
       name: "layout",
       type: "blocks",
-      blocks: [Hero, Features, CTA, ProblemSection, PlatformArchitecture, OperationalGovernance],
+      blocks: [
+        Hero,
+        CTA,
+        ProblemSection,
+        PlatformArchitecture,
+        OperationalGovernance,
+        StrategicTrust,
+      ],
       required: true,
     },
   ],

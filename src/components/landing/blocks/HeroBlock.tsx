@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { motion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 import { AmbientGlows } from "@/components/ui/ambient-glows";
@@ -15,6 +18,94 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import Eyebrow from "../layout/eyebrow";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { BrandText } from "../layout/brand-formatter";
+
+// Left content animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 25 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const, // easeOutExpo
+    },
+  },
+};
+
+// Right visual animation variants
+const rightSideVariants = {
+  hidden: { opacity: 0, scale: 0.96, y: 30 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 1,
+      delay: 0.35,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+// Metrics list stagger variants
+const metricsGridVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.6,
+    },
+  },
+};
+
+const metricItemVariants = {
+  hidden: { opacity: 0, y: 15, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
+// Pipeline flow items stagger
+const flowContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.9,
+    },
+  },
+};
+
+const flowItemVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
 
 export const HeroBlock: React.FC<HeroType> = ({
   eyebrow,
@@ -64,25 +155,44 @@ export const HeroBlock: React.FC<HeroType> = ({
       <PageContainer className="relative pb-12 pt-24 sm:pb-16 sm:pt-28 lg:pb-24">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           {/* LEFT CONTENT */}
-          <div className="relative z-10 max-w-2xl text-center md:text-start">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="relative z-10 max-w-2xl text-center md:text-start"
+          >
             {/* Eyebrow */}
-            {eyebrow && <Eyebrow className="mb-8">{eyebrow}</Eyebrow>}
+            {eyebrow && (
+              <motion.div
+                variants={itemVariants}
+                className="mb-8 flex justify-center md:justify-start"
+              >
+                <Eyebrow>{eyebrow}</Eyebrow>
+              </motion.div>
+            )}
 
             {/* Heading */}
-            <SectionHeading as="h1" className="flex max-w-3xl flex-col items-center md:items-start">
-              <BrandText text={heading} />
-            </SectionHeading>
+            <motion.div variants={itemVariants}>
+              <SectionHeading as="h1" className="max-w-3xl">
+                <BrandText text={heading} className="" logoClassName="mt-4 text-white!" />
+              </SectionHeading>
+            </motion.div>
 
             {/* Subtext */}
             {subtext && (
-              <SectionDescription className="mt-8 text-center md:max-w-xl md:text-start lg:text-xl">
-                {subtext}
-              </SectionDescription>
+              <motion.div variants={itemVariants}>
+                <SectionDescription className="mt-8 text-center md:max-w-xl md:text-start lg:text-xl">
+                  {subtext}
+                </SectionDescription>
+              </motion.div>
             )}
 
             {/* CTA Buttons */}
             {ctaButtons && ctaButtons.length > 0 && (
-              <div className="mt-10 flex flex-col gap-4 md:flex-row">
+              <motion.div
+                variants={itemVariants}
+                className="mt-10 flex flex-col gap-4 justify-center md:justify-start md:flex-row"
+              >
                 {ctaButtons.map((button) => {
                   const isPrimary = button.style !== "secondary";
 
@@ -90,13 +200,9 @@ export const HeroBlock: React.FC<HeroType> = ({
                     <Button
                       key={button.id}
                       asChild
-                      size="lg"
-                      variant={isPrimary ? "default" : "outline"}
-                      className={`group relative h-12 overflow-hidden rounded-xl px-8 text-sm font-medium transition-all duration-300 ${
-                        isPrimary
-                          ? "border border-tasto-cyan/50 bg-tasto-cyan/10 text-tasto-cyan shadow-[0_0_20px_-5px_rgba(var(--tasto-cyan-rgb,0,255,255),0.3)] hover:bg-tasto-cyan/20 hover:shadow-[0_0_25px_-2px_rgba(var(--tasto-cyan-rgb,0,255,255),0.5)]"
-                          : "border border-tasto-white/10 bg-tasto-white/5 text-tasto-white hover:border-tasto-white/20 hover:bg-tasto-white/10"
-                      }`}
+                      size="xl"
+                      variant={isPrimary ? "dark-default" : "dark-outline"}
+                      className="group relative overflow-hidden px-8"
                     >
                       <Link href={button.link || "#"}>
                         <span className="relative z-10 flex items-center">
@@ -109,12 +215,17 @@ export const HeroBlock: React.FC<HeroType> = ({
                     </Button>
                   );
                 })}
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
 
           {/* RIGHT VISUAL - IMAGE OR PREMIUM DASHBOARD */}
-          <div className="relative">
+          <motion.div
+            variants={rightSideVariants}
+            initial="hidden"
+            animate="visible"
+            className="relative"
+          >
             {imageUrl ? (
               <div className="group relative transition-transform duration-700 hover:-translate-y-2">
                 {/* Outer Glow on Hover */}
@@ -136,7 +247,7 @@ export const HeroBlock: React.FC<HeroType> = ({
                 </div>
               </div>
             ) : (
-              <div className="pointer-events-none select-none">
+              <div>
                 {/* Dashboard Container Wrapper for Hover Effects */}
                 <div className="group relative transition-transform duration-700 hover:-translate-y-2">
                   {/* Outer Glow on Hover */}
@@ -173,17 +284,23 @@ export const HeroBlock: React.FC<HeroType> = ({
                     </div>
 
                     {/* Metrics Grid */}
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <motion.div
+                      variants={metricsGridVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="grid gap-4 md:grid-cols-2"
+                    >
                       {metrics.map((metric, idx) => (
-                        <DashboardMetric
-                          key={idx}
-                          title={metric.title}
-                          value={metric.value}
-                          change={metric.change}
-                          iconName={metric.icon || "Activity"}
-                        />
+                        <motion.div key={idx} variants={metricItemVariants}>
+                          <DashboardMetric
+                            title={metric.title}
+                            value={metric.value}
+                            change={metric.change}
+                            iconName={metric.icon || "Activity"}
+                          />
+                        </motion.div>
                       ))}
-                    </div>
+                    </motion.div>
 
                     {/* Module Flow - Pipeline Style */}
                     <div className="mt-8 rounded-2xl border border-tasto-white/5 bg-tasto-white/2 p-6 shadow-inner">
@@ -197,28 +314,39 @@ export const HeroBlock: React.FC<HeroType> = ({
                         </div>
                       </div>
 
-                      <div className="flex flex-col items-center gap-3 text-xs md:flex-row md:flex-wrap">
+                      <motion.div
+                        variants={flowContainerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="flex flex-col items-center gap-3 text-xs md:flex-row md:flex-wrap"
+                      >
                         {flowItems.map((item, idx) => (
                           <React.Fragment key={idx}>
-                            <div className="relative overflow-hidden rounded-xl border border-tasto-white/10 bg-linear-to-br from-tasto-white/5 to-transparent px-4 py-2.5 text-tasto-white/70 transition-colors duration-300 group-hover:border-tasto-cyan/20 group-hover:text-tasto-white">
+                            <motion.div
+                              variants={flowItemVariants}
+                              className="relative overflow-hidden rounded-xl border border-tasto-white/10 bg-linear-to-br from-tasto-white/5 to-transparent px-4 py-2.5 text-tasto-white/70 transition-colors duration-300 group-hover:border-tasto-cyan/20 group-hover:text-tasto-white"
+                            >
                               {item.label}
-                            </div>
+                            </motion.div>
 
                             {idx !== flowItems.length - 1 && (
-                              <div className="flex items-center text-tasto-white/20 transition-colors duration-300 group-hover:text-tasto-cyan/50 max-md:rotate-90">
+                              <motion.div
+                                variants={flowItemVariants}
+                                className="flex items-center text-tasto-white/20 transition-colors duration-300 group-hover:text-tasto-cyan/50 max-md:rotate-90"
+                              >
                                 <div className="h-px w-3 bg-current" />
                                 <ArrowRight className="h-3 w-3 -ml-1" />
-                              </div>
+                              </motion.div>
                             )}
                           </React.Fragment>
                         ))}
-                      </div>
+                      </motion.div>
                     </div>
                   </div>
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
       </PageContainer>
     </section>

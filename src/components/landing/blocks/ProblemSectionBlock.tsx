@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { motion } from "motion/react";
 
 import type { ProblemSection as ProblemSectionType } from "@/payload-types";
 import Eyebrow from "../layout/eyebrow";
@@ -6,18 +9,60 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SectionDescription } from "@/components/ui/section-description";
 
+import { SectionReveal } from "@/components/ui/section-reveal";
+
 interface ProblemCardProps {
   title: string;
   description: string;
   index: number;
 }
 
+// Parent container staggers the children
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+// Subtle slide-up-and-in for cards
+const cardVariants = {
+  hidden: { opacity: 0, y: 30, x: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const, // easeOutExpo
+    },
+  },
+};
+
+// Fade & slide up for left intro text
+const introVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  },
+};
+
 /**
  * Individual strategic problem card.
  */
 const ProblemCard: React.FC<ProblemCardProps> = ({ title, description, index }) => {
   return (
-    <div className="group relative overflow-hidden rounded-[2rem] border border-tasto-black/4 bg-tasto-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-tasto-blue/20 hover:bg-linear-to-b hover:from-tasto-white hover:to-tasto-blue/2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:p-10">
+    <motion.div
+      variants={cardVariants}
+      className="group relative overflow-hidden rounded-[2rem] border border-tasto-black/4 bg-tasto-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-tasto-blue/20 hover:bg-linear-to-b hover:from-tasto-white hover:to-tasto-blue/2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:p-10"
+    >
       {/* Dynamic Left Edge Indicator */}
       <div className="absolute left-0 top-0 h-full w-1.5 bg-tasto-black/3 transition-colors duration-500 group-hover:bg-tasto-blue" />
 
@@ -43,7 +88,7 @@ const ProblemCard: React.FC<ProblemCardProps> = ({ title, description, index }) 
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -61,10 +106,16 @@ export const ProblemSectionBlock: React.FC<ProblemSectionType> = ({
       {/* Light-mode Architectural Grid */}
       <GridPattern variant="light" />
 
-      <div className="container relative z-10 mx-auto px-4">
+      <SectionReveal className="container relative z-10 mx-auto px-4">
         <div className="grid gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           {/* LEFT COLUMN - Sticky Intro */}
-          <div className="max-md:text-center lg:sticky lg:top-32 lg:self-start">
+          <motion.div
+            variants={introVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="max-md:text-center lg:sticky lg:top-32 lg:self-start"
+          >
             {/* Eyebrow */}
             {eyebrow && (
               <Eyebrow variant="blue" className="mb-6">
@@ -79,10 +130,16 @@ export const ProblemSectionBlock: React.FC<ProblemSectionType> = ({
             <SectionDescription variant="light" className="mx-auto mt-8 max-w-xl lg:mx-0">
               {description}
             </SectionDescription>
-          </div>
+          </motion.div>
 
           {/* RIGHT COLUMN - Problem Cards */}
-          <div className="flex flex-col gap-6">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            className="flex flex-col gap-6"
+          >
             {problems?.map((problem, index) => (
               <ProblemCard
                 key={problem.id}
@@ -91,9 +148,9 @@ export const ProblemSectionBlock: React.FC<ProblemSectionType> = ({
                 index={index}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </SectionReveal>
     </section>
   );
 };
