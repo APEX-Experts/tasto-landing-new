@@ -119,7 +119,7 @@ export const StrategicTrustBlock: React.FC<StrategicTrustType> = ({
           </SectionHeading>
 
           <SectionDescription variant="light" className="mx-auto mt-6 max-w-2xl">
-            <BrandText text={description} logoClassName="mr-1" />
+            <BrandText text={description} logoClassName="md:mr-1" />
           </SectionDescription>
         </motion.div>
 

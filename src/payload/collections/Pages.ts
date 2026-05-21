@@ -7,6 +7,11 @@ import { StrategicTrust } from "../blocks/StrategicTrust";
 import { CTA } from "../blocks/CTA";
 import { ContactHero } from "../blocks/ContactHero";
 import { ContactInquiry } from "../blocks/ContactInquiry";
+import { AboutHero } from "../blocks/AboutHero";
+import { AboutProblem } from "../blocks/AboutProblem";
+import { AboutPhilosophy } from "../blocks/AboutPhilosophy";
+import { AboutCTA } from "../blocks/AboutCTA";
+import { CompanyExpertise } from "../blocks/CompanyExpertise";
 
 /**
  * Payload CMS Collection configuration for dynamic Pages.
@@ -65,6 +70,11 @@ export const Pages: CollectionConfig = {
         StrategicTrust,
         ContactHero,
         ContactInquiry,
+        AboutHero,
+        AboutProblem,
+        AboutPhilosophy,
+        AboutCTA,
+        CompanyExpertise,
       ],
       required: true,
     },

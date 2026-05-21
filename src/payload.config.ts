@@ -20,6 +20,11 @@ import { SiteSettings } from "./payload/globals/SiteSettings.ts";
 import { CTA } from "./payload/blocks/CTA.ts";
 import { ContactHero } from "./payload/blocks/ContactHero.ts";
 import { ContactInquiry } from "./payload/blocks/ContactInquiry.ts";
+import { AboutHero } from "./payload/blocks/AboutHero.ts";
+import { AboutProblem } from "./payload/blocks/AboutProblem.ts";
+import { AboutPhilosophy } from "./payload/blocks/AboutPhilosophy.ts";
+import { AboutCTA } from "./payload/blocks/AboutCTA.ts";
+import { CompanyExpertise } from "./payload/blocks/CompanyExpertise.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -77,5 +82,10 @@ export default buildConfig({
     StrategicTrust,
     ContactHero,
     ContactInquiry,
+    AboutHero,
+    AboutProblem,
+    AboutPhilosophy,
+    AboutCTA,
+    CompanyExpertise,
   ],
 });

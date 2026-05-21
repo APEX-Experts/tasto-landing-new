@@ -8,6 +8,11 @@ import { ProblemSectionBlock } from "./ProblemSectionBlock";
 import { StrategicTrustBlock } from "./StrategicTrustBlock";
 import { ContactHeroBlock } from "./ContactHeroBlock";
 import { ContactInquiryBlock } from "./ContactInquiryBlock";
+import { AboutHeroBlock } from "./AboutHeroBlock";
+import { AboutProblemBlock } from "./AboutProblemBlock";
+import { AboutPhilosophyBlock } from "./AboutPhilosophyBlock";
+import { AboutCTABlock } from "./AboutCTABlock";
+import { CompanyExpertiseBlock } from "./CompanyExpertiseBlock";
 
 /**
  * Props for the RenderBlocks component.
@@ -56,6 +61,16 @@ export const RenderBlocks: React.FC<Props> = ({ blocks }) => {
             return <ContactHeroBlock key={key} {...block} />;
           case "contact-inquiry":
             return <ContactInquiryBlock key={key} {...block} />;
+          case "about-hero":
+            return <AboutHeroBlock key={key} {...block} />;
+          case "about-problem":
+            return <AboutProblemBlock key={key} {...block} />;
+          case "about-philosophy":
+            return <AboutPhilosophyBlock key={key} {...block} />;
+          case "about-cta":
+            return <AboutCTABlock key={key} {...block} />;
+          case "company-expertise":
+            return <CompanyExpertiseBlock key={key} {...block} />;
 
           default:
             return (

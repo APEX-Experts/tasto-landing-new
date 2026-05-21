@@ -74,6 +74,11 @@ export interface Config {
     'strategic-trust': StrategicTrust;
     'contact-hero': ContactHero;
     'contact-inquiry': ContactInquiry;
+    'about-hero': AboutHero;
+    'about-problem': AboutProblem;
+    'about-philosophy': AboutPhilosophy;
+    'about-cta': AboutCta;
+    'company-expertise': CompanyExpertise;
   };
   collections: {
     users: User;
@@ -10181,6 +10186,92 @@ export interface ContactInquiry {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-hero".
+ */
+export interface AboutHero {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'about-hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-problem".
+ */
+export interface AboutProblem {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  problems: {
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'about-problem';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-philosophy".
+ */
+export interface AboutPhilosophy {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  principles: {
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'about-philosophy';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-cta".
+ */
+export interface AboutCta {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  primaryCTA: {
+    label: string;
+    href: string;
+  };
+  secondaryCTA?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'about-cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "company-expertise".
+ */
+export interface CompanyExpertise {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  /**
+   * Raw SVG code for the company logo. Will be rendered in a small, restrained manner.
+   */
+  logoSvg?: string | null;
+  capabilities: {
+    title: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'company-expertise';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -20177,6 +20268,72 @@ export interface Page {
         blockName?: string | null;
         blockType: 'contact-inquiry';
       }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'about-hero';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        problems: {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'about-problem';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        principles: {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'about-philosophy';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        primaryCTA: {
+          label: string;
+          href: string;
+        };
+        secondaryCTA?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'about-cta';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        /**
+         * Raw SVG code for the company logo. Will be rendered in a small, restrained manner.
+         */
+        logoSvg?: string | null;
+        capabilities: {
+          title: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'company-expertise';
+      }
   )[];
   updatedAt: string;
   createdAt: string;
@@ -20539,6 +20696,84 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               formHeading?: T;
               formDescription?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'about-hero'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'about-problem'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              problems?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'about-philosophy'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              principles?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'about-cta'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              primaryCTA?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCTA?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'company-expertise'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              logoSvg?: T;
+              capabilities?:
+                | T
+                | {
+                    title?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };

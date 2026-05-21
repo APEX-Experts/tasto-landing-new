@@ -196,6 +196,7 @@ export function GenericForm<T>({
       >
         <Button
           type="button"
+          size="xl"
           variant={isDark ? "dark-outline" : "outline"}
           onClick={() => {
             form.reset();
@@ -211,7 +212,8 @@ export function GenericForm<T>({
               type="submit"
               form="generic-form"
               disabled={!canSubmit || isSubmitting}
-              variant={isDark ? "dark-default" : "default"}
+              size="xl"
+              variant={isDark ? "cyan" : "default"}
             >
               {isSubmitting ? "Submitting..." : submitText}
             </Button>

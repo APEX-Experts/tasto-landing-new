@@ -200,8 +200,8 @@ export const HeroBlock: React.FC<HeroType> = ({
                     <Button
                       key={button.id}
                       asChild
-                      size="xl"
-                      variant={isPrimary ? "dark-default" : "dark-outline"}
+                      size="xxl"
+                      variant={isPrimary ? "cyan" : "dark-outline"}
                       className="group relative overflow-hidden px-8"
                     >
                       <Link href={button.link || "#"}>

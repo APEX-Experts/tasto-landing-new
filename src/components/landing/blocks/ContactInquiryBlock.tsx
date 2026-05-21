@@ -64,7 +64,7 @@ export const ContactInquiryBlock: React.FC<ContactInquiryType> = ({
   };
 
   return (
-    <section className="relative overflow-hidden bg-tasto-white text-tasto-black py-16 lg:py-24 z-10">
+    <section className="relative bg-tasto-white text-tasto-black py-16 lg:py-24 z-10">
       <SectionReveal className="container mx-auto px-4 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-start">
           {/* LEFT COLUMN: Contact Information & Methods */}
@@ -129,7 +129,7 @@ export const ContactInquiryBlock: React.FC<ContactInquiryType> = ({
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
             viewport={{ once: true }}
-            className="lg:col-span-7 relative"
+            className="lg:col-span-7 relative lg:sticky lg:top-24 lg:self-start"
           >
             {/* Ambient Backglow for Form Focus */}
             <div className="absolute -inset-4 rounded-[3rem] bg-tasto-blue/5 blur-3xl" />

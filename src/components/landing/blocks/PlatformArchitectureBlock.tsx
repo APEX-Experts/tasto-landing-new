@@ -166,7 +166,7 @@ export const PlatformArchitectureBlock: React.FC<PlatformArchitectureType> = ({
 
           {/* Description */}
           <SectionDescription className="mx-auto mt-8 max-w-2xl">
-            <BrandText text={description} logoClassName="mr-1" />
+            <BrandText text={description} logoClassName="md:mr-1" />
           </SectionDescription>
         </motion.div>
 

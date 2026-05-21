@@ -117,6 +117,124 @@ function stripMeta(doc: Record<string, unknown>): Record<string, unknown> {
 // Main
 // ---------------------------------------------------------------------------
 
+interface CliArgs {
+  collection?: string;
+  slug?: string;
+  name?: string;
+  force?: boolean;
+  help?: boolean;
+}
+
+function parseArgs(): CliArgs {
+  const args = process.argv.slice(2);
+  const parsed: CliArgs = {};
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+
+    if (arg === "--help" || arg === "-h") {
+      parsed.help = true;
+    } else if (arg === "--force" || arg === "-f") {
+      parsed.force = true;
+    } else if (arg.startsWith("--collection=")) {
+      parsed.collection = arg.split("=")[1];
+    } else if (arg === "--collection" || arg === "-c") {
+      parsed.collection = args[++i];
+    } else if (arg.startsWith("--slug=")) {
+      parsed.slug = arg.split("=")[1];
+    } else if (arg === "--slug" || arg === "-s") {
+      parsed.slug = args[++i];
+    } else if (arg.startsWith("--name=")) {
+      parsed.name = arg.split("=")[1];
+    } else if (arg === "--name" || arg === "-n") {
+      parsed.name = args[++i];
+    } else if (!arg.startsWith("-")) {
+      // Positional argument
+      const lower = arg.toLowerCase();
+      if (["users", "media", "pages", "posts", "globals"].includes(lower)) {
+        parsed.collection = lower;
+      } else {
+        // Treat as slug
+        parsed.slug = arg;
+      }
+    }
+  }
+
+  return parsed;
+}
+
+function printHelp() {
+  console.log(`
+Usage: pnpm seed [options] [positional]
+
+Options:
+  -c, --collection <name>   Seed only the specified collection (users, media, pages, posts, globals)
+  -s, --slug <slug>         Seed only items with the matching slug (pages, posts, globals)
+  -n, --name <name>         Seed only items with the matching title/email/filename
+  -f, --force               Update/overwrite existing documents instead of skipping them
+  -h, --help                Show this help message
+
+Examples:
+  pnpm seed                         Seed everything (skip existing)
+  pnpm seed --force                 Seed everything, overwriting existing records
+  pnpm seed pages                   Seed only the "pages" collection
+  pnpm seed --slug about            Seed only the page or post with slug "about"
+  pnpm seed --slug about --force    Seed and overwrite the page/post with slug "about"
+  pnpm seed -c globals -s footer    Seed/update only the "footer" global
+`);
+}
+
+function matchesFilters(
+  item: {
+    slug?: string;
+    title?: string;
+    email?: string;
+    name?: string;
+    filename?: string;
+    alt?: string;
+  },
+  cliArgs: CliArgs,
+  collectionName: string,
+): boolean {
+  // 1. Collection filter
+  if (cliArgs.collection && cliArgs.collection !== collectionName) {
+    return false;
+  }
+
+  // 2. Slug filter
+  if (cliArgs.slug) {
+    const slugLower = cliArgs.slug.toLowerCase();
+    const itemSlug = item.slug?.toLowerCase();
+    if (itemSlug !== slugLower) {
+      return false;
+    }
+  }
+
+  // 3. Name filter
+  if (cliArgs.name) {
+    const nameLower = cliArgs.name.toLowerCase();
+    const matchesName =
+      item.title?.toLowerCase().includes(nameLower) ||
+      item.email?.toLowerCase().includes(nameLower) ||
+      item.name?.toLowerCase().includes(nameLower) ||
+      item.filename?.toLowerCase().includes(nameLower) ||
+      item.alt?.toLowerCase().includes(nameLower);
+
+    if (!matchesName) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+const cliArgs = parseArgs();
+
+if (cliArgs.help) {
+  printHelp();
+  process.exit(0);
+}
+
 async function seed() {
   console.log("=".repeat(60));
   console.log("  Payload CMS — Seed from Backup");
@@ -135,121 +253,292 @@ async function seed() {
    */
   const idMap = new Map<string | number, string | number>();
 
-  // ── 1. Users ──────────────────────────────────────────────────────────────
-  console.log("\n[1/5] Users");
+  // Load all backup files up front to pre-populate ID mappings
   const backupUsers = fs.existsSync(path.join(BACKUP_DIR, "users.json"))
     ? readJson<BackupUserDoc[]>(path.join(BACKUP_DIR, "users.json"))
     : [];
 
-  for (const user of backupUsers) {
+  const backupMedia = fs.existsSync(path.join(BACKUP_DIR, "media.json"))
+    ? readJson<BackupMediaDoc[]>(path.join(BACKUP_DIR, "media.json"))
+    : [];
+
+  const backupPages = fs.existsSync(path.join(BACKUP_DIR, "pages.json"))
+    ? readJson<BackupPageDoc[]>(path.join(BACKUP_DIR, "pages.json"))
+    : [];
+
+  const backupPosts = fs.existsSync(path.join(BACKUP_DIR, "posts.json"))
+    ? readJson<BackupPostDoc[]>(path.join(BACKUP_DIR, "posts.json"))
+    : [];
+
+  // ── Pre-populate ID map from existing database records ────────────────────
+  console.log("\nMapping existing database records to preserve relationships...");
+
+  // 1. Users
+  if (backupUsers.length > 0) {
     try {
-      const created = await payload.create({
+      const existingUsers = await payload.find({
         collection: "users",
-        data: {
-          email: user.email,
-          // A default password — the admin should change this after seeding
-          password: "ChangeMe123!",
-        },
+        limit: 1000,
         overrideAccess: true,
       });
-      idMap.set(user.id, created.id);
-      console.log(`  ✔ User: ${user.email} (${user.id} → ${created.id})`);
-    } catch (err: unknown) {
-      console.warn(`  ⚠ Could not create user ${user.email}: ${(err as Error).message}`);
+      for (const dbUser of existingUsers.docs) {
+        const backupUser = backupUsers.find((u) => u.email === dbUser.email);
+        if (backupUser) {
+          idMap.set(backupUser.id, dbUser.id);
+        }
+      }
+    } catch (err) {
+      console.warn("  ⚠ Could not fetch existing users for mapping:", (err as Error).message);
+    }
+  }
+
+  // 2. Media
+  if (backupMedia.length > 0) {
+    try {
+      const existingMedia = await payload.find({
+        collection: "media",
+        limit: 10000,
+        overrideAccess: true,
+      });
+      for (const dbMedia of existingMedia.docs) {
+        const backupItem = backupMedia.find((m) => m.filename === dbMedia.filename);
+        if (backupItem) {
+          idMap.set(backupItem.id, dbMedia.id);
+        }
+      }
+    } catch (err) {
+      console.warn("  ⚠ Could not fetch existing media for mapping:", (err as Error).message);
+    }
+  }
+
+  // 3. Pages
+  if (backupPages.length > 0) {
+    try {
+      const existingPages = await payload.find({
+        collection: "pages",
+        limit: 1000,
+        overrideAccess: true,
+      });
+      for (const dbPage of existingPages.docs) {
+        const backupItem = backupPages.find((p) => p.slug === dbPage.slug);
+        if (backupItem) {
+          idMap.set(backupItem.id, dbPage.id);
+        }
+      }
+    } catch (err) {
+      console.warn("  ⚠ Could not fetch existing pages for mapping:", (err as Error).message);
+    }
+  }
+
+  // 4. Posts
+  if (backupPosts.length > 0) {
+    try {
+      const existingPosts = await payload.find({
+        collection: "posts",
+        limit: 1000,
+        overrideAccess: true,
+      });
+      for (const dbPost of existingPosts.docs) {
+        const backupItem = backupPosts.find((p) => p.slug === dbPost.slug);
+        if (backupItem) {
+          idMap.set(backupItem.id, dbPost.id);
+        }
+      }
+    } catch (err) {
+      console.warn("  ⚠ Could not fetch existing posts for mapping:", (err as Error).message);
+    }
+  }
+
+  // ── 1. Users ──────────────────────────────────────────────────────────────
+  console.log("\n[1/5] Users");
+  const usersToProcess = backupUsers.filter((u) => matchesFilters(u, cliArgs, "users"));
+  if (usersToProcess.length === 0) {
+    console.log("  Skipping / no users match filters.");
+  } else {
+    for (const user of usersToProcess) {
+      if (idMap.has(user.id)) {
+        if (cliArgs.force) {
+          try {
+            const existingId = idMap.get(user.id)!;
+            await payload.update({
+              collection: "users",
+              id: existingId,
+              data: {
+                email: user.email,
+              },
+              overrideAccess: true,
+            });
+            console.log(`  ✔ User: ${user.email} (updated existing)`);
+          } catch (err: unknown) {
+            console.warn(`  ⚠ Could not update user ${user.email}: ${(err as Error).message}`);
+          }
+        } else {
+          console.log(`  - User: ${user.email} (already exists, skipping)`);
+        }
+      } else {
+        try {
+          const created = await payload.create({
+            collection: "users",
+            data: {
+              email: user.email,
+              // A default password — the admin should change this after seeding
+              password: "ChangeMe123!",
+            },
+            overrideAccess: true,
+          });
+          idMap.set(user.id, created.id);
+          console.log(`  ✔ User: ${user.email} (${user.id} → ${created.id})`);
+        } catch (err: unknown) {
+          console.warn(`  ⚠ Could not create user ${user.email}: ${(err as Error).message}`);
+        }
+      }
     }
   }
 
   // ── 2. Media ──────────────────────────────────────────────────────────────
   console.log("\n[2/5] Media");
-  const backupMedia = fs.existsSync(path.join(BACKUP_DIR, "media.json"))
-    ? readJson<BackupMediaDoc[]>(path.join(BACKUP_DIR, "media.json"))
-    : [];
+  const mediaToProcess = backupMedia.filter((m) => matchesFilters(m, cliArgs, "media"));
+  if (mediaToProcess.length === 0) {
+    console.log("  Skipping / no media matches filters.");
+  } else {
+    for (const doc of mediaToProcess) {
+      if (!doc.filename) {
+        console.warn(`  ⚠ Skipping media ${doc.id} — no filename`);
+        continue;
+      }
 
-  for (const doc of backupMedia) {
-    if (!doc.filename) {
-      console.warn(`  ⚠ Skipping media ${doc.id} — no filename`);
-      continue;
-    }
+      const filePath = path.join(MEDIA_DIR, doc.filename);
 
-    const filePath = path.join(MEDIA_DIR, doc.filename);
+      if (!fs.existsSync(filePath)) {
+        console.warn(`  ⚠ Skipping ${doc.filename} — file not found in backup/media`);
+        continue;
+      }
 
-    if (!fs.existsSync(filePath)) {
-      console.warn(`  ⚠ Skipping ${doc.filename} — file not found in backup/media`);
-      continue;
-    }
-
-    try {
-      const created = await payload.create({
-        collection: "media",
-        data: { alt: doc.alt || doc.filename },
-        filePath,
-        overrideAccess: true,
-      });
-      idMap.set(doc.id, created.id);
-      console.log(`  ✔ Media: ${doc.filename} (${doc.id} → ${created.id})`);
-    } catch (err: unknown) {
-      console.warn(`  ⚠ Could not upload ${doc.filename}: ${(err as Error).message}`);
+      if (idMap.has(doc.id)) {
+        if (cliArgs.force) {
+          try {
+            const existingId = idMap.get(doc.id)!;
+            await payload.update({
+              collection: "media",
+              id: existingId,
+              data: { alt: doc.alt || doc.filename },
+              filePath,
+              overrideAccess: true,
+            });
+            console.log(`  ✔ Media: ${doc.filename} (updated existing)`);
+          } catch (err: unknown) {
+            console.warn(`  ⚠ Could not update ${doc.filename}: ${(err as Error).message}`);
+          }
+        } else {
+          console.log(`  - Media: ${doc.filename} (already exists, skipping)`);
+        }
+      } else {
+        try {
+          const created = await payload.create({
+            collection: "media",
+            data: { alt: doc.alt || doc.filename },
+            filePath,
+            overrideAccess: true,
+          });
+          idMap.set(doc.id, created.id);
+          console.log(`  ✔ Media: ${doc.filename} (${doc.id} → ${created.id})`);
+        } catch (err: unknown) {
+          console.warn(`  ⚠ Could not upload ${doc.filename}: ${(err as Error).message}`);
+        }
+      }
     }
   }
 
   // ── 3. Pages ──────────────────────────────────────────────────────────────
   console.log("\n[3/5] Pages");
-  const backupPages = fs.existsSync(path.join(BACKUP_DIR, "pages.json"))
-    ? readJson<BackupPageDoc[]>(path.join(BACKUP_DIR, "pages.json"))
-    : [];
+  const pagesToProcess = backupPages.filter((p) => matchesFilters(p, cliArgs, "pages"));
+  if (pagesToProcess.length === 0) {
+    console.log("  Skipping / no pages match filters.");
+  } else {
+    for (const doc of pagesToProcess) {
+      try {
+        const raw = stripMeta(doc as unknown as Record<string, unknown>);
+        const remapped = remapIds(raw, idMap) as Record<string, unknown>;
 
-  for (const doc of backupPages) {
-    try {
-      const raw = stripMeta(doc as unknown as Record<string, unknown>);
-      const remapped = remapIds(raw, idMap) as Record<string, unknown>;
-
-      const created = await payload.create({
-        collection: "pages",
-        data: remapped as unknown as Page,
-        overrideAccess: true,
-      });
-      idMap.set(doc.id, created.id);
-      console.log(`  ✔ Page: "${doc.title}" [/${doc.slug}] (${doc.id} → ${created.id})`);
-    } catch (err: unknown) {
-      console.warn(`  ⚠ Could not create page "${doc.title}": ${(err as Error).message}`);
+        if (idMap.has(doc.id)) {
+          if (cliArgs.force) {
+            const existingId = idMap.get(doc.id)!;
+            await payload.update({
+              collection: "pages",
+              id: existingId,
+              data: remapped as unknown as Page,
+              overrideAccess: true,
+            });
+            console.log(`  ✔ Page: "${doc.title}" [/${doc.slug}] (updated existing)`);
+          } else {
+            console.log(`  - Page: "${doc.title}" [/${doc.slug}] (already exists, skipping)`);
+          }
+        } else {
+          const created = await payload.create({
+            collection: "pages",
+            data: remapped as unknown as Page,
+            overrideAccess: true,
+          });
+          idMap.set(doc.id, created.id);
+          console.log(`  ✔ Page: "${doc.title}" [/${doc.slug}] (${doc.id} → ${created.id})`);
+        }
+      } catch (err: unknown) {
+        console.warn(`  ⚠ Could not create/update page "${doc.title}": ${(err as Error).message}`);
+      }
     }
   }
 
   // ── 4. Posts ──────────────────────────────────────────────────────────────
   console.log("\n[4/5] Posts");
-  const backupPosts = fs.existsSync(path.join(BACKUP_DIR, "posts.json"))
-    ? readJson<BackupPostDoc[]>(path.join(BACKUP_DIR, "posts.json"))
-    : [];
+  const postsToProcess = backupPosts.filter((p) => matchesFilters(p, cliArgs, "posts"));
+  if (postsToProcess.length === 0) {
+    console.log("  Skipping / no posts match filters.");
+  } else {
+    for (const doc of postsToProcess) {
+      try {
+        const raw = stripMeta(doc as unknown as Record<string, unknown>);
 
-  for (const doc of backupPosts) {
-    try {
-      const raw = stripMeta(doc as unknown as Record<string, unknown>);
+        // Resolve relationship references before remapping
+        const authorId = extractId(doc.author as BackupUserDoc | string | number | null);
+        const featuredImageId = extractId(
+          doc.featuredImage as BackupMediaDoc | string | number | null,
+        );
 
-      // Resolve relationship references before remapping
-      const authorId = extractId(doc.author as BackupUserDoc | string | number | null);
-      const featuredImageId = extractId(
-        doc.featuredImage as BackupMediaDoc | string | number | null,
-      );
+        const remapped = remapIds(raw, idMap) as Record<string, unknown>;
 
-      const remapped = remapIds(raw, idMap) as Record<string, unknown>;
+        // Override with the resolved (remapped) IDs
+        if (authorId !== null) {
+          remapped.author = idMap.get(authorId) ?? authorId;
+        }
+        if (featuredImageId !== null) {
+          remapped.featuredImage = idMap.get(featuredImageId) ?? featuredImageId;
+        }
 
-      // Override with the resolved (remapped) IDs
-      if (authorId !== null) {
-        remapped.author = idMap.get(authorId) ?? authorId;
+        if (idMap.has(doc.id)) {
+          if (cliArgs.force) {
+            const existingId = idMap.get(doc.id)!;
+            await payload.update({
+              collection: "posts",
+              id: existingId,
+              data: remapped as unknown as Post,
+              overrideAccess: true,
+            });
+            console.log(`  ✔ Post: "${doc.title}" [/${doc.slug}] (updated existing)`);
+          } else {
+            console.log(`  - Post: "${doc.title}" [/${doc.slug}] (already exists, skipping)`);
+          }
+        } else {
+          const created = await payload.create({
+            collection: "posts",
+            data: remapped as unknown as Post,
+            overrideAccess: true,
+          });
+          idMap.set(doc.id, created.id);
+          console.log(`  ✔ Post: "${doc.title}" [/${doc.slug}] (${doc.id} → ${created.id})`);
+        }
+      } catch (err: unknown) {
+        console.warn(`  ⚠ Could not create/update post "${doc.title}": ${(err as Error).message}`);
       }
-      if (featuredImageId !== null) {
-        remapped.featuredImage = idMap.get(featuredImageId) ?? featuredImageId;
-      }
-
-      const created = await payload.create({
-        collection: "posts",
-        data: remapped as unknown as Post,
-        overrideAccess: true,
-      });
-      idMap.set(doc.id, created.id);
-      console.log(`  ✔ Post: "${doc.title}" [/${doc.slug}] (${doc.id} → ${created.id})`);
-    } catch (err: unknown) {
-      console.warn(`  ⚠ Could not create post "${doc.title}": ${(err as Error).message}`);
     }
   }
 
@@ -261,16 +550,21 @@ async function seed() {
     console.warn("  ⚠ globals.json not found — skipping globals.");
   } else {
     const allGlobals = readJson<Record<string, Record<string, unknown>>>(globalsPath);
-
     const globalSlugs = ["header", "footer", "site-settings"] as const;
 
+    let processedAny = false;
     for (const slug of globalSlugs) {
+      if (!matchesFilters({ slug, title: slug }, cliArgs, "globals")) {
+        continue;
+      }
+
       const data = allGlobals[slug];
       if (!data) {
         console.warn(`  ⚠ No data found for global "${slug}" — skipping.`);
         continue;
       }
 
+      processedAny = true;
       try {
         const raw = stripMeta(data);
         const remapped = remapIds(raw, idMap) as Record<string, unknown>;
@@ -285,6 +579,9 @@ async function seed() {
       } catch (err: unknown) {
         console.warn(`  ⚠ Could not update global "${slug}": ${(err as Error).message}`);
       }
+    }
+    if (!processedAny) {
+      console.log("  Skipping / no globals match filters.");
     }
   }
 

@@ -131,7 +131,7 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
           <SectionHeading>{heading}</SectionHeading>
 
           <SectionDescription className="mt-6 sm:text-xl">
-            <BrandText text={description} logoClassName="mr-1" />
+            <BrandText text={description} logoClassName="md:mr-1" />
           </SectionDescription>
         </motion.div>
 

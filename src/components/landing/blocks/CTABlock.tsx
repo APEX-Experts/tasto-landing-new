@@ -49,7 +49,7 @@ export const CTABlock: React.FC<Cta> = ({
             <BrandText
               className="text-lg leading-relaxed text-tasto-white/60 sm:text-xl"
               text={description || ""}
-              logoClassName="text-white mr-1"
+              logoClassName="text-white md:mr-1"
             />
           </div>
 
