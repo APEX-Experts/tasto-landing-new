@@ -1,13 +1,11 @@
-// src/components/landing/blocks/PlatformArchitectureBlock.tsx
-
-import React from "react";
 import { ArrowRight } from "lucide-react";
+import React from "react";
 
+import { GridPattern } from "@/components/ui/grid-pattern";
+import { SectionDescription } from "@/components/ui/section-description";
+import { SectionHeading } from "@/components/ui/section-heading";
 import type { PlatformArchitecture as PlatformArchitectureType } from "@/payload-types";
 import Eyebrow from "../layout/eyebrow";
-import { AmbientGlows } from "@/components/ui/ambient-glows";
-import { GridPattern } from "@/components/ui/grid-pattern";
-import { GradientText } from "@/components/ui/gradient-text";
 
 interface PillarCardProps {
   title: string;
@@ -82,12 +80,9 @@ export const PlatformArchitectureBlock: React.FC<PlatformArchitectureType> = ({
   pillars,
 }) => {
   return (
-    <section className="relative overflow-hidden bg-tasto-bg py-24 lg:py-32">
+    <section className="relative bg-tasto-bg py-24">
       {/* Architectural Grid Background */}
       <GridPattern />
-
-      {/* Ambient Glows */}
-      <AmbientGlows />
 
       <div className="container relative z-10 mx-auto px-4">
         {/* Section Intro */}
@@ -96,17 +91,10 @@ export const PlatformArchitectureBlock: React.FC<PlatformArchitectureType> = ({
           {eyebrow && <Eyebrow className="mb-8">{eyebrow}</Eyebrow>}
 
           {/* Heading */}
-          <GradientText
-            as="h2"
-            className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
-          >
-            {heading}
-          </GradientText>
+          <SectionHeading>{heading}</SectionHeading>
 
           {/* Description */}
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-tasto-white/60">
-            {description}
-          </p>
+          <SectionDescription className="mx-auto mt-8 max-w-2xl">{description}</SectionDescription>
         </div>
 
         {/* Pillars Grid */}

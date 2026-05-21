@@ -3,9 +3,15 @@ interface LogoProps {
 }
 
 export function FullLogo({ className = "" }: LogoProps) {
+  const hasDisplayClass = /\b(flex|inline-flex|block|inline-block|grid|inline-grid|hidden)\b/.test(
+    className,
+  );
+
   return (
     <div
-      className={`flex items-center group relative pointer-events-none select-none w-fit ${className}`}
+      className={`${
+        hasDisplayClass ? "" : "flex"
+      } items-center group relative pointer-events-none select-none w-fit ${className}`}
     >
       {/* TASTO text in Neuroxa font */}
       <span className="font-display tracking-wide leading-none">TASTO</span>

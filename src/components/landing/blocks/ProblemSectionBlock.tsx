@@ -1,11 +1,10 @@
-// src/components/landing/blocks/ProblemSectionBlock.tsx
-
 import React from "react";
 
 import type { ProblemSection as ProblemSectionType } from "@/payload-types";
 import Eyebrow from "../layout/eyebrow";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { GradientText } from "@/components/ui/gradient-text";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { SectionDescription } from "@/components/ui/section-description";
 
 interface ProblemCardProps {
   title: string;
@@ -74,18 +73,12 @@ export const ProblemSectionBlock: React.FC<ProblemSectionType> = ({
             )}
 
             {/* Heading */}
-            <GradientText
-              as="h2"
-              variant="light"
-              className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
-            >
-              {heading}
-            </GradientText>
+            <SectionHeading variant="light">{heading}</SectionHeading>
 
             {/* Description */}
-            <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-tasto-black/65 lg:mx-0">
+            <SectionDescription variant="light" className="mx-auto mt-8 max-w-xl lg:mx-0">
               {description}
-            </p>
+            </SectionDescription>
           </div>
 
           {/* RIGHT COLUMN - Problem Cards */}

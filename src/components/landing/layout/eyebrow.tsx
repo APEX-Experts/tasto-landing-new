@@ -19,10 +19,10 @@ export const Eyebrow: React.FC<Props> = ({ children, className, variant = "cyan"
         className,
       )}
     >
-      <span className="relative flex h-2 w-2">
+      <span className="relative flex h-2 w-2 items-center justify-center">
         <span
           className={cn(
-            "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",
+            "absolute inline-flex h-full w-full animate-ping rounded-full items-center justify-center opacity-75",
             isCyan ? "bg-tasto-cyan" : "bg-tasto-blue",
           )}
         ></span>

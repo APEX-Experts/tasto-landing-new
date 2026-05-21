@@ -1,10 +1,9 @@
+import type { Page } from "@/payload-types";
 import React from "react";
 import { HeroBlock } from "./HeroBlock";
-import { FeaturesBlock } from "./FeaturesBlock";
-import { CTABlock } from "./CTABlock";
-import type { Page } from "@/payload-types";
-import { ProblemSectionBlock } from "./ProblemSectionBlock";
+import { OperationalGovernanceBlock } from "./OperationalGovernanceBlock";
 import { PlatformArchitectureBlock } from "./PlatformArchitectureBlock";
+import { ProblemSectionBlock } from "./ProblemSectionBlock";
 
 /**
  * Props for the RenderBlocks component.
@@ -39,14 +38,13 @@ export const RenderBlocks: React.FC<Props> = ({ blocks }) => {
         switch (block.blockType) {
           case "hero":
             return <HeroBlock key={key} {...block} />;
-          case "features":
-            return <FeaturesBlock key={key} {...block} />;
-          case "cta":
-            return <CTABlock key={key} {...block} />;
+
           case "problem-section":
             return <ProblemSectionBlock key={key} {...block} />;
           case "platform-architecture":
             return <PlatformArchitectureBlock key={key} {...block} />;
+          case "operational-governance":
+            return <OperationalGovernanceBlock key={key} {...block} />;
           default:
             return (
               <section key={index} className="container mx-auto py-12 px-4">

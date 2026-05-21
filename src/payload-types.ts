@@ -71,6 +71,7 @@ export interface Config {
     cta: Cta;
     'problem-section': ProblemSection;
     'platform-architecture': PlatformArchitecture;
+    'operational-governance': OperationalGovernance;
   };
   collections: {
     users: User;
@@ -157,9 +158,141 @@ export interface Hero {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Optional image that replaces the dashboard mockup column if uploaded.
+   */
+  heroImage?: (number | null) | Media;
+  dashboardActivityIcon?:
+    | (
+        | 'Shield'
+        | 'Activity'
+        | 'Fingerprint'
+        | 'LockKeyhole'
+        | 'Lock'
+        | 'Key'
+        | 'Database'
+        | 'Server'
+        | 'Cpu'
+        | 'Zap'
+        | 'Globe'
+        | 'Settings'
+        | 'TrendingUp'
+        | 'Users'
+        | 'DollarSign'
+        | 'CheckCircle'
+        | 'AlertCircle'
+        | 'Info'
+        | 'Menu'
+        | 'Eye'
+        | 'Award'
+        | 'Briefcase'
+        | 'Cloud'
+        | 'Clock'
+        | 'Heart'
+        | 'Layers'
+        | 'Sparkles'
+        | 'Terminal'
+      )
+    | null;
+  dashboardEyebrow?: string | null;
+  dashboardTitle?: string | null;
+  dashboardStatusText?: string | null;
+  dashboardMetrics?:
+    | {
+        title: string;
+        value: string;
+        change: string;
+        icon?:
+          | (
+              | 'Shield'
+              | 'Activity'
+              | 'Fingerprint'
+              | 'LockKeyhole'
+              | 'Lock'
+              | 'Key'
+              | 'Database'
+              | 'Server'
+              | 'Cpu'
+              | 'Zap'
+              | 'Globe'
+              | 'Settings'
+              | 'TrendingUp'
+              | 'Users'
+              | 'DollarSign'
+              | 'CheckCircle'
+              | 'AlertCircle'
+              | 'Info'
+              | 'Menu'
+              | 'Eye'
+              | 'Award'
+              | 'Briefcase'
+              | 'Cloud'
+              | 'Clock'
+              | 'Heart'
+              | 'Layers'
+              | 'Sparkles'
+              | 'Terminal'
+            )
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  dashboardFlowTitle?: string | null;
+  dashboardFlowStatusText?: string | null;
+  dashboardFlowItems?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    tablet?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -257,6 +390,117 @@ export interface PlatformArchitecture {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "operational-governance".
+ */
+export interface OperationalGovernance {
+  /**
+   * Small label displayed above the section heading.
+   */
+  eyebrow?: string | null;
+  /**
+   * Main section heading.
+   */
+  heading: string;
+  /**
+   * Supporting introduction text for the section.
+   */
+  description: string;
+  /**
+   * Operational governance capabilities displayed in the section.
+   */
+  capabilities: {
+    title: string;
+    description: string;
+    /**
+     * Short supporting label or operational outcome.
+     */
+    metric: string;
+    id?: string | null;
+  }[];
+  /**
+   * Large highlighted strategic quote displayed in the side panel.
+   */
+  sideQuote: string;
+  networkStatusIcon?:
+    | (
+        | 'Shield'
+        | 'Activity'
+        | 'Fingerprint'
+        | 'LockKeyhole'
+        | 'Lock'
+        | 'Key'
+        | 'Database'
+        | 'Server'
+        | 'Cpu'
+        | 'Zap'
+        | 'Globe'
+        | 'Settings'
+        | 'TrendingUp'
+        | 'Users'
+        | 'DollarSign'
+        | 'CheckCircle'
+        | 'AlertCircle'
+        | 'Info'
+        | 'Menu'
+        | 'Eye'
+        | 'Award'
+        | 'Briefcase'
+        | 'Cloud'
+        | 'Clock'
+        | 'Heart'
+        | 'Layers'
+        | 'Sparkles'
+        | 'Terminal'
+      )
+    | null;
+  networkStatusLabel?: string | null;
+  networkStatusText?: string | null;
+  liveBadgeText?: string | null;
+  metrics?:
+    | {
+        title: string;
+        value: string;
+        icon?:
+          | (
+              | 'Shield'
+              | 'Activity'
+              | 'Fingerprint'
+              | 'LockKeyhole'
+              | 'Lock'
+              | 'Key'
+              | 'Database'
+              | 'Server'
+              | 'Cpu'
+              | 'Zap'
+              | 'Globe'
+              | 'Settings'
+              | 'TrendingUp'
+              | 'Users'
+              | 'DollarSign'
+              | 'CheckCircle'
+              | 'AlertCircle'
+              | 'Info'
+              | 'Menu'
+              | 'Eye'
+              | 'Award'
+              | 'Briefcase'
+              | 'Cloud'
+              | 'Clock'
+              | 'Heart'
+              | 'Layers'
+              | 'Sparkles'
+              | 'Terminal'
+            )
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'operational-governance';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -282,51 +526,6 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    card?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    tablet?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
@@ -349,6 +548,93 @@ export interface Page {
               label: string;
               link: string;
               style?: ('primary' | 'secondary') | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Optional image that replaces the dashboard mockup column if uploaded.
+         */
+        heroImage?: (number | null) | Media;
+        dashboardActivityIcon?:
+          | (
+              | 'Shield'
+              | 'Activity'
+              | 'Fingerprint'
+              | 'LockKeyhole'
+              | 'Lock'
+              | 'Key'
+              | 'Database'
+              | 'Server'
+              | 'Cpu'
+              | 'Zap'
+              | 'Globe'
+              | 'Settings'
+              | 'TrendingUp'
+              | 'Users'
+              | 'DollarSign'
+              | 'CheckCircle'
+              | 'AlertCircle'
+              | 'Info'
+              | 'Menu'
+              | 'Eye'
+              | 'Award'
+              | 'Briefcase'
+              | 'Cloud'
+              | 'Clock'
+              | 'Heart'
+              | 'Layers'
+              | 'Sparkles'
+              | 'Terminal'
+            )
+          | null;
+        dashboardEyebrow?: string | null;
+        dashboardTitle?: string | null;
+        dashboardStatusText?: string | null;
+        dashboardMetrics?:
+          | {
+              title: string;
+              value: string;
+              change: string;
+              icon?:
+                | (
+                    | 'Shield'
+                    | 'Activity'
+                    | 'Fingerprint'
+                    | 'LockKeyhole'
+                    | 'Lock'
+                    | 'Key'
+                    | 'Database'
+                    | 'Server'
+                    | 'Cpu'
+                    | 'Zap'
+                    | 'Globe'
+                    | 'Settings'
+                    | 'TrendingUp'
+                    | 'Users'
+                    | 'DollarSign'
+                    | 'CheckCircle'
+                    | 'AlertCircle'
+                    | 'Info'
+                    | 'Menu'
+                    | 'Eye'
+                    | 'Award'
+                    | 'Briefcase'
+                    | 'Cloud'
+                    | 'Clock'
+                    | 'Heart'
+                    | 'Layers'
+                    | 'Sparkles'
+                    | 'Terminal'
+                  )
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        dashboardFlowTitle?: string | null;
+        dashboardFlowStatusText?: string | null;
+        dashboardFlowItems?:
+          | {
+              label: string;
               id?: string | null;
             }[]
           | null;
@@ -433,6 +719,113 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'platform-architecture';
+      }
+    | {
+        /**
+         * Small label displayed above the section heading.
+         */
+        eyebrow?: string | null;
+        /**
+         * Main section heading.
+         */
+        heading: string;
+        /**
+         * Supporting introduction text for the section.
+         */
+        description: string;
+        /**
+         * Operational governance capabilities displayed in the section.
+         */
+        capabilities: {
+          title: string;
+          description: string;
+          /**
+           * Short supporting label or operational outcome.
+           */
+          metric: string;
+          id?: string | null;
+        }[];
+        /**
+         * Large highlighted strategic quote displayed in the side panel.
+         */
+        sideQuote: string;
+        networkStatusIcon?:
+          | (
+              | 'Shield'
+              | 'Activity'
+              | 'Fingerprint'
+              | 'LockKeyhole'
+              | 'Lock'
+              | 'Key'
+              | 'Database'
+              | 'Server'
+              | 'Cpu'
+              | 'Zap'
+              | 'Globe'
+              | 'Settings'
+              | 'TrendingUp'
+              | 'Users'
+              | 'DollarSign'
+              | 'CheckCircle'
+              | 'AlertCircle'
+              | 'Info'
+              | 'Menu'
+              | 'Eye'
+              | 'Award'
+              | 'Briefcase'
+              | 'Cloud'
+              | 'Clock'
+              | 'Heart'
+              | 'Layers'
+              | 'Sparkles'
+              | 'Terminal'
+            )
+          | null;
+        networkStatusLabel?: string | null;
+        networkStatusText?: string | null;
+        liveBadgeText?: string | null;
+        metrics?:
+          | {
+              title: string;
+              value: string;
+              icon?:
+                | (
+                    | 'Shield'
+                    | 'Activity'
+                    | 'Fingerprint'
+                    | 'LockKeyhole'
+                    | 'Lock'
+                    | 'Key'
+                    | 'Database'
+                    | 'Server'
+                    | 'Cpu'
+                    | 'Zap'
+                    | 'Globe'
+                    | 'Settings'
+                    | 'TrendingUp'
+                    | 'Users'
+                    | 'DollarSign'
+                    | 'CheckCircle'
+                    | 'AlertCircle'
+                    | 'Info'
+                    | 'Menu'
+                    | 'Eye'
+                    | 'Award'
+                    | 'Briefcase'
+                    | 'Cloud'
+                    | 'Clock'
+                    | 'Heart'
+                    | 'Layers'
+                    | 'Sparkles'
+                    | 'Terminal'
+                  )
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'operational-governance';
       }
   )[];
   updatedAt: string;
@@ -647,6 +1040,28 @@ export interface PagesSelect<T extends boolean = true> {
                     style?: T;
                     id?: T;
                   };
+              heroImage?: T;
+              dashboardActivityIcon?: T;
+              dashboardEyebrow?: T;
+              dashboardTitle?: T;
+              dashboardStatusText?: T;
+              dashboardMetrics?:
+                | T
+                | {
+                    title?: T;
+                    value?: T;
+                    change?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              dashboardFlowTitle?: T;
+              dashboardFlowStatusText?: T;
+              dashboardFlowItems?:
+                | T
+                | {
+                    label?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -707,6 +1122,36 @@ export interface PagesSelect<T extends boolean = true> {
                           label?: T;
                           id?: T;
                         };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'operational-governance'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              capabilities?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    metric?: T;
+                    id?: T;
+                  };
+              sideQuote?: T;
+              networkStatusIcon?: T;
+              networkStatusLabel?: T;
+              networkStatusText?: T;
+              liveBadgeText?: T;
+              metrics?:
+                | T
+                | {
+                    title?: T;
+                    value?: T;
+                    icon?: T;
                     id?: T;
                   };
               id?: T;
