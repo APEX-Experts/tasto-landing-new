@@ -4,7 +4,7 @@ import React from "react";
 /**
  * Types for supported max-width values corresponding to Tailwind's max-w classes.
  */
-export type MaxWidth =
+type MaxWidth =
   | "sm"
   | "md"
   | "lg"

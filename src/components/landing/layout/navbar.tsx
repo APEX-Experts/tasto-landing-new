@@ -20,12 +20,12 @@ import {
 /**
  * Represents a single navigation route.
  */
-export type NavRoute = {
+interface NavRoute {
   /** The target URL for the link */
   href: string;
   /** The text label to display for the link */
   label: string;
-};
+}
 
 /**
  * Props for the Navbar component.

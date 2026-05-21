@@ -1,7 +1,6 @@
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
 import React from "react";
 import { importMap } from "@/app/(payload)/admin/importMap";
-// import "@/app/globals.css";
 import configPromise from "../../payload.config";
 import { ServerFunctionClientArgs } from "payload";
 import "@payloadcms/next/css";

@@ -4,7 +4,7 @@ import { Logo, LogoProps } from "./logo";
 /**
  * Represents a column of links in the footer.
  */
-export interface FooterColumn {
+interface FooterColumn {
   /** The title of the column */
   title: string;
   /** An array of links to display in this column */
