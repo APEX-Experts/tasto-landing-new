@@ -5,19 +5,30 @@ interface BrandTextProps {
   text?: string | null;
   className?: string;
   logoClassName?: string;
+  spanClassName?: string;
 }
 
-export function BrandText({ text, className = "", logoClassName = "" }: BrandTextProps) {
+export function BrandText({
+  text,
+  className = "",
+  logoClassName = "",
+  spanClassName,
+}: BrandTextProps) {
   if (!text) return null;
 
   const parts = text.split(/(TASTO)/g);
-  console.log(parts);
 
   return (
     <>
       {parts.map((part, index) => {
         if (part === "TASTO") {
-          return <FullLogo key={index} className={`inline-flex items-center ${logoClassName}`} />;
+          return (
+            <FullLogo
+              key={index}
+              className={`inline-flex items-center ${logoClassName}`}
+              spanClassName={spanClassName}
+            />
+          );
         }
 
         return (

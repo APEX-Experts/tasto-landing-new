@@ -6,6 +6,8 @@ import { OperationalGovernanceBlock } from "./OperationalGovernanceBlock";
 import { PlatformArchitectureBlock } from "./PlatformArchitectureBlock";
 import { ProblemSectionBlock } from "./ProblemSectionBlock";
 import { StrategicTrustBlock } from "./StrategicTrustBlock";
+import { ContactHeroBlock } from "./ContactHeroBlock";
+import { ContactInquiryBlock } from "./ContactInquiryBlock";
 
 /**
  * Props for the RenderBlocks component.
@@ -50,6 +52,11 @@ export const RenderBlocks: React.FC<Props> = ({ blocks }) => {
             return <StrategicTrustBlock key={key} {...block} />;
           case "cta":
             return <CTABlock key={key} {...block} />;
+          case "contact-hero":
+            return <ContactHeroBlock key={key} {...block} />;
+          case "contact-inquiry":
+            return <ContactInquiryBlock key={key} {...block} />;
+
           default:
             return (
               <section key={key} className="container mx-auto py-12 px-4">

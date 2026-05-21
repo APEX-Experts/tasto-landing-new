@@ -18,6 +18,8 @@ import { Footer } from "./payload/globals/Footer.ts";
 import { Header } from "./payload/globals/Header.ts";
 import { SiteSettings } from "./payload/globals/SiteSettings.ts";
 import { CTA } from "./payload/blocks/CTA.ts";
+import { ContactHero } from "./payload/blocks/ContactHero.ts";
+import { ContactInquiry } from "./payload/blocks/ContactInquiry.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -66,5 +68,14 @@ export default buildConfig({
         ]
       : []),
   ],
-  blocks: [Hero, CTA, ProblemSection, PlatformArchitecture, OperationalGovernance, StrategicTrust],
+  blocks: [
+    Hero,
+    CTA,
+    ProblemSection,
+    PlatformArchitecture,
+    OperationalGovernance,
+    StrategicTrust,
+    ContactHero,
+    ContactInquiry,
+  ],
 });

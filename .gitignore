@@ -45,3 +45,6 @@ next-env.d.ts
 .vscode
 media/
 openapi.json
+
+# Payload CMS backup dumps
+/backup/

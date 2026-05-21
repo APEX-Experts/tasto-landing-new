@@ -1,30 +1,13 @@
-export const lucideIconOptions = [
-  { label: "Shield", value: "Shield" },
-  { label: "Activity", value: "Activity" },
-  { label: "Fingerprint", value: "Fingerprint" },
-  { label: "LockKeyhole", value: "LockKeyhole" },
-  { label: "Lock", value: "Lock" },
-  { label: "Key", value: "Key" },
-  { label: "Database", value: "Database" },
-  { label: "Server", value: "Server" },
-  { label: "Cpu", value: "Cpu" },
-  { label: "Zap", value: "Zap" },
-  { label: "Globe", value: "Globe" },
-  { label: "Settings", value: "Settings" },
-  { label: "TrendingUp", value: "TrendingUp" },
-  { label: "Users", value: "Users" },
-  { label: "DollarSign", value: "DollarSign" },
-  { label: "CheckCircle", value: "CheckCircle" },
-  { label: "AlertCircle", value: "AlertCircle" },
-  { label: "Info", value: "Info" },
-  { label: "Menu", value: "Menu" },
-  { label: "Eye", value: "Eye" },
-  { label: "Award", value: "Award" },
-  { label: "Briefcase", value: "Briefcase" },
-  { label: "Cloud", value: "Cloud" },
-  { label: "Clock", value: "Clock" },
-  { label: "Heart", value: "Heart" },
-  { label: "Layers", value: "Layers" },
-  { label: "Sparkles", value: "Sparkles" },
-  { label: "Terminal", value: "Terminal" },
-];
+import { ICON_NAMES, kebabToPascalCase } from "@/constants/icon-names";
+
+// 1. Map them all to PascalCase
+const pascalIcons = ICON_NAMES.map((icon) => kebabToPascalCase(icon));
+
+// 2. Remove duplicates using a Set, then convert back to an array
+const uniquePascalIcons = Array.from(new Set(pascalIcons));
+
+// 3. Export the options for Payload
+export const lucideIconOptions = uniquePascalIcons.map((icon) => ({
+  label: icon,
+  value: icon,
+}));

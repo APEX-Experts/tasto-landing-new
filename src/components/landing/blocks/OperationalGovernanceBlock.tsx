@@ -111,7 +111,7 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
         <div className="absolute right-0 top-1/4 h-[800px] w-[800px] translate-x-1/3 rounded-full bg-tasto-cyan/5 blur-[150px]" />
       </div>
 
-      <AmbientGlows />
+      <AmbientGlows withAccents />
 
       <SectionReveal className="container relative z-10 mx-auto px-4">
         {/* TOP INTRO */}
@@ -157,7 +157,7 @@ export const OperationalGovernanceBlock: React.FC<OperationalGovernanceType> = (
                 {/* Subtle left-edge active indicator */}
                 <div className="absolute -left-4 top-1/2 h-0 w-1 -translate-y-1/2 bg-tasto-cyan transition-all duration-500 group-hover:h-2/3 md:left-0 md:-ml-6" />
 
-                <div className="mb-4 flex flex-col items-center md:items-start justify-between gap-3 sm:flex-row sm:items-center">
+                <div className="mb-4 flex flex-col items-center justify-between gap-3 sm:flex-row sm:items-center">
                   <h3 className="text-2xl font-semibold tracking-tight text-tasto-white transition-colors duration-300">
                     {capability.title}
                   </h3>

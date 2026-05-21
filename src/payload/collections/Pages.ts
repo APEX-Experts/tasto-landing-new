@@ -5,6 +5,8 @@ import { PlatformArchitecture } from "../blocks/PlatformArchitecture";
 import { ProblemSection } from "../blocks/ProblemSection";
 import { StrategicTrust } from "../blocks/StrategicTrust";
 import { CTA } from "../blocks/CTA";
+import { ContactHero } from "../blocks/ContactHero";
+import { ContactInquiry } from "../blocks/ContactInquiry";
 
 /**
  * Payload CMS Collection configuration for dynamic Pages.
@@ -61,6 +63,8 @@ export const Pages: CollectionConfig = {
         PlatformArchitecture,
         OperationalGovernance,
         StrategicTrust,
+        ContactHero,
+        ContactInquiry,
       ],
       required: true,
     },

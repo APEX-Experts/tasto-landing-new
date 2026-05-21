@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { DeepValue, FormValidateOrFn, Updater, useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import { $ZodTypeInternals } from "zod/v4/core";
+import { cn } from "@/lib/utils";
 
 /**
  * Configuration for a single form field.
@@ -56,6 +57,8 @@ interface GenericFormProps<T> {
   error?: string | null;
   /** Optional callback function to reset the form */
   onReset?: () => void;
+  /** Optional theme configuration (default: "light") */
+  theme?: "dark" | "light";
 }
 
 /**
@@ -71,6 +74,7 @@ interface GenericFormProps<T> {
  * @param {string} [props.submitText="Submit"] - Optional custom text for the submit button.
  * @param {string} [props.error] - Optional global error message to display in the form.
  * @param {() => void} [props.onReset] - Optional callback function to reset the form.
+ * @param {boolean} [props.isDark=false] - Optional flag to indicate if the form should use dark mode styles.
  *
  * @example
  * ```tsx
@@ -92,6 +96,7 @@ export function GenericForm<T>({
   submitText = "Submit",
   error,
   onReset,
+  theme = "light",
 }: GenericFormProps<T>) {
   const form = useForm({
     defaultValues,
@@ -100,8 +105,17 @@ export function GenericForm<T>({
     },
     onSubmit: async ({ value }) => {
       await onSubmit(value as T);
+      form.reset();
     },
   });
+
+  const isDark = theme === "dark";
+  const inputClassName = isDark
+    ? "bg-tasto-white/5 border-tasto-white/10 text-tasto-white placeholder:text-tasto-white/30 focus-visible:border-tasto-cyan/50 focus-visible:ring-tasto-cyan/20"
+    : "bg-tasto-black/2 border-tasto-black/10 text-tasto-black placeholder:text-tasto-black/30 focus-visible:border-tasto-blue/50 focus-visible:ring-tasto-blue/20";
+
+  const labelClassName = isDark ? "text-tasto-white/70" : "text-tasto-black/70";
+  const descriptionClassName = isDark ? "text-tasto-white/50" : "text-tasto-black/50";
 
   return (
     <form
@@ -126,7 +140,9 @@ export function GenericForm<T>({
 
               return (
                 <UIField data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>{fieldConfig.label}</FieldLabel>
+                  <FieldLabel htmlFor={field.name} className={labelClassName}>
+                    {fieldConfig.label}
+                  </FieldLabel>
 
                   {fieldConfig.type === "textarea" ? (
                     <Textarea
@@ -140,7 +156,7 @@ export function GenericForm<T>({
                         )
                       }
                       placeholder={fieldConfig.placeholder}
-                      className="min-h-24 resize-none"
+                      className={cn("min-h-24 resize-none", inputClassName)}
                       aria-invalid={isInvalid}
                     />
                   ) : (
@@ -156,12 +172,15 @@ export function GenericForm<T>({
                         )
                       }
                       placeholder={fieldConfig.placeholder}
+                      className={inputClassName}
                       aria-invalid={isInvalid}
                     />
                   )}
 
                   {fieldConfig.description && (
-                    <FieldDescription>{fieldConfig.description}</FieldDescription>
+                    <FieldDescription className={descriptionClassName}>
+                      {fieldConfig.description}
+                    </FieldDescription>
                   )}
 
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -171,10 +190,13 @@ export function GenericForm<T>({
           </form.Field>
         ))}
       </FieldGroup>
-      <UIField orientation="horizontal" className="w-full justify-between">
+      <UIField
+        orientation="horizontal"
+        className="w-full justify-between max-md:flex-col max-md:*:w-full"
+      >
         <Button
           type="button"
-          variant="outline"
+          variant={isDark ? "dark-outline" : "outline"}
           onClick={() => {
             form.reset();
             onReset?.();
@@ -185,7 +207,12 @@ export function GenericForm<T>({
 
         <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
           {([canSubmit, isSubmitting]) => (
-            <Button type="submit" form="generic-form" disabled={!canSubmit}>
+            <Button
+              type="submit"
+              form="generic-form"
+              disabled={!canSubmit || isSubmitting}
+              variant={isDark ? "dark-default" : "default"}
+            >
               {isSubmitting ? "Submitting..." : submitText}
             </Button>
           )}
