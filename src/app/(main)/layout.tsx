@@ -3,17 +3,20 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryProvider } from "@/providers/query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
+import { Geist } from "next/font/google";
 import { Toaster } from "sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const neuroxa = localFont({
+  src: "../fonts/Neuroxa.ttf",
+  variable: "--font-neuroxa",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const geist = Geist({
   subsets: ["latin"],
+  variable: "--font-geist",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -35,7 +38,7 @@ export default function MainLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${neuroxa.variable} ${neuroxa.className} ${geist.variable} ${geist.className} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

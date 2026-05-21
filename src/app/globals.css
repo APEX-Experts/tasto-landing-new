@@ -52,6 +52,14 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* Brand Colors */
+  --color-tasto-blue: #003a9f;
+  --color-tasto-cyan: #31d8cb;
+  --color-tasto-black: #212121;
+  --color-tasto-white: #f5f5f5;
+  /* Brand Typography */
+  --font-sans: var(--font-geist), sans-serif; /* Default for body text, cards, nav */
+  --font-display: var(--font-neuroxa), sans-serif; /* Reserved for Logo, H1, Hero */
 }
 
 :root {
