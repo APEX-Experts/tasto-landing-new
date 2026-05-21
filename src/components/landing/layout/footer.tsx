@@ -72,7 +72,7 @@ export function Footer({
         <div className="grid grid-cols-1 md:grid-cols-4 max-md:items-center max-md:text-center gap-12">
           {/* Brand & Info */}
           <div className="md:col-span-1 space-y-6">
-            <div className="space-y-4 flex items-center justify-center flex-col">
+            <div className="space-y-4 flex items-center md:items-start max-md:justify-center flex-col">
               <Logo brandName={brandName} logoImage={logoImage} logoSvg={logoSvg} />
               {description && (
                 <p className="text-sm text-tasto-white/60 leading-relaxed">{description}</p>
