@@ -1,0 +1,90 @@
+import { getPayload } from "@/lib/cms/getPayload";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { RenderBlocks } from "@/components/landing/blocks/RenderBlocks";
+
+/**
+ * Props for the dynamic page route.
+ */
+type Props = {
+  /** The route parameters including the page slug */
+  params: Promise<{
+    slug: string;
+  }>;
+};
+
+/**
+ * Generates static params for all pages in the 'pages' collection.
+ * This enables Static Site Generation (SSG) for known routes.
+ */
+export async function generateStaticParams() {
+  const payload = await getPayload();
+  const pages = await payload.find({
+    collection: "pages",
+    limit: 100,
+    select: {
+      slug: true,
+    },
+  });
+
+  return pages.docs.map(({ slug }) => ({
+    slug,
+  }));
+}
+
+/**
+ * Generates dynamic metadata for the page based on Payload CMS content.
+ */
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const payload = await getPayload();
+
+  const result = await payload.find({
+    collection: "pages",
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  });
+
+  const page = result.docs[0];
+
+  if (!page) {
+    return {};
+  }
+
+  return {
+    title: `${page.title} | APEX Experts`,
+    description: `View ${page.title} on APEX Experts.`,
+  };
+}
+
+/**
+ * Dynamic route component that fetches and displays a page by its slug from Payload CMS.
+ */
+export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  const payload = await getPayload();
+
+  const result = await payload.find({
+    collection: "pages",
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  });
+
+  const page = result.docs[0];
+
+  if (!page) {
+    return notFound();
+  }
+
+  return (
+    <main className="min-h-screen">
+      <RenderBlocks blocks={page.layout} />
+    </main>
+  );
+}
