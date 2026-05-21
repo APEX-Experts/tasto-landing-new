@@ -70,6 +70,7 @@ export interface Config {
     features: Features;
     cta: Cta;
     'problem-section': ProblemSection;
+    'platform-architecture': PlatformArchitecture;
   };
   collections: {
     users: User;
@@ -235,6 +236,27 @@ export interface ProblemSection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "platform-architecture".
+ */
+export interface PlatformArchitecture {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  pillars: {
+    title: string;
+    description: string;
+    modules: {
+      label: string;
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'platform-architecture';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -394,6 +416,23 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'problem-section';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        pillars: {
+          title: string;
+          description: string;
+          modules: {
+            label: string;
+            id?: string | null;
+          }[];
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'platform-architecture';
       }
   )[];
   updatedAt: string;
@@ -646,6 +685,28 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     title?: T;
                     description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'platform-architecture'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              pillars?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    modules?:
+                      | T
+                      | {
+                          label?: T;
+                          id?: T;
+                        };
                     id?: T;
                   };
               id?: T;

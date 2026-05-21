@@ -16,6 +16,7 @@ import { Hero } from "./payload/blocks/Hero.ts";
 import { Features } from "./payload/blocks/Features.ts";
 import { CTA } from "./payload/blocks/CTA.ts";
 import { ProblemSection } from "./payload/blocks/ProblemSection.ts";
+import { PlatformArchitecture } from "./payload/blocks/PlatformArchitecture.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -64,5 +65,5 @@ export default buildConfig({
         ]
       : []),
   ],
-  blocks: [Hero, Features, CTA, ProblemSection],
+  blocks: [Hero, Features, CTA, ProblemSection, PlatformArchitecture],
 });

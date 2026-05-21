@@ -3,6 +3,7 @@ import { Hero } from "../blocks/Hero";
 import { Features } from "../blocks/Features";
 import { CTA } from "../blocks/CTA";
 import { ProblemSection } from "../blocks/ProblemSection";
+import { PlatformArchitecture } from "../blocks/PlatformArchitecture";
 
 /**
  * Payload CMS Collection configuration for dynamic Pages.
@@ -52,7 +53,7 @@ export const Pages: CollectionConfig = {
     {
       name: "layout",
       type: "blocks",
-      blocks: [Hero, Features, CTA, ProblemSection],
+      blocks: [Hero, Features, CTA, ProblemSection, PlatformArchitecture],
       required: true,
     },
   ],

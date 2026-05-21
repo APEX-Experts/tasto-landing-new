@@ -4,6 +4,7 @@ import { FeaturesBlock } from "./FeaturesBlock";
 import { CTABlock } from "./CTABlock";
 import type { Page } from "@/payload-types";
 import { ProblemSectionBlock } from "./ProblemSectionBlock";
+import { PlatformArchitectureBlock } from "./PlatformArchitectureBlock";
 
 /**
  * Props for the RenderBlocks component.
@@ -44,6 +45,8 @@ export const RenderBlocks: React.FC<Props> = ({ blocks }) => {
             return <CTABlock key={key} {...block} />;
           case "problem-section":
             return <ProblemSectionBlock key={key} {...block} />;
+          case "platform-architecture":
+            return <PlatformArchitectureBlock key={key} {...block} />;
           default:
             return (
               <section key={index} className="container mx-auto py-12 px-4">

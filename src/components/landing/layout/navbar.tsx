@@ -66,13 +66,36 @@ export function Navbar({
 }: NavbarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white backdrop-blur supports-backdrop-filter:bg-white">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
+        isScrolled
+          ? "border-b border-tasto-white/10 bg-tasto-bg/90 backdrop-blur-md shadow-lg shadow-tasto-bg/30"
+          : "border-b border-transparent bg-transparent"
+      }`}
+    >
       <div className="container mx-auto flex h-14 items-center justify-between px-4 md:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center">
-          <Logo brandName={brandName} logoImage={logoImage} logoSvg={logoSvg} />
+          <Logo
+            brandName={brandName}
+            logoImage={logoImage}
+            logoSvg={logoSvg}
+            logoOnly={logoOnly}
+            className="transition-colors duration-300 text-tasto-white"
+          />
         </Link>
 
         {/* Desktop Navigation (Hidden on Mobile) */}
@@ -83,11 +106,14 @@ export function Navbar({
               <Link
                 key={route.href}
                 href={route.href}
-                className={`transition-colors hover:text-foreground/80 ${
-                  isActive ? "text-foreground" : "text-foreground/60"
+                className={`transition-all duration-300 relative py-1 text-sm ${
+                  isActive ? "text-tasto-cyan" : "text-tasto-white/70 hover:text-tasto-white"
                 }`}
               >
                 {route.label}
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-tasto-cyan rounded-full shadow-[0_0_8px_rgba(49,216,203,0.5)]" />
+                )}
               </Link>
             );
           })}
@@ -101,12 +127,19 @@ export function Navbar({
           {actionSlot}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden text-tasto-white hover:bg-tasto-white/10! hover:text-tasto-white transition-colors duration-300"
+              >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-75 sm:w-100 p-6">
+            <SheetContent
+              side="right"
+              className="w-80 max-w-[85vw] p-6 bg-tasto-bg/95 text-tasto-white border-l border-tasto-white/10 backdrop-blur-md"
+            >
               <SheetTitle className="sr-only">Menu</SheetTitle>
               <div className="mb-8">
                 <Logo
@@ -114,6 +147,7 @@ export function Navbar({
                   logoImage={logoImage}
                   logoSvg={logoSvg}
                   logoOnly={logoOnly}
+                  className="text-tasto-white"
                 />
               </div>
 
@@ -126,8 +160,8 @@ export function Navbar({
                       key={route.href}
                       href={route.href}
                       onClick={() => setIsOpen(false)} // Close menu on click
-                      className={`text-lg font-medium transition-colors hover:text-foreground/80 ${
-                        isActive ? "text-foreground" : "text-foreground/60"
+                      className={`text-lg font-medium transition-colors ${
+                        isActive ? "text-tasto-cyan" : "text-tasto-white/70 hover:text-tasto-white"
                       }`}
                     >
                       {route.label}

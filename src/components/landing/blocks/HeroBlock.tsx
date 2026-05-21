@@ -2,14 +2,18 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Activity } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { AmbientGlows } from "@/components/ui/ambient-glows";
+import { GradientText } from "@/components/ui/gradient-text";
 
 import type { Hero as HeroType } from "@/payload-types";
 
 import { FullLogo } from "../layout/full-logo";
 import { PageContainer } from "@/components/layout/PageContainer";
+import Eyebrow from "../layout/eyebrow";
+import { GridPattern } from "@/components/ui/grid-pattern";
 
 /**
  * Automatically replaces the word "TASTO"
@@ -35,26 +39,27 @@ const formatHeading = (text?: string | null) => {
 
 export const HeroBlock: React.FC<HeroType> = ({ eyebrow, heading, subtext, ctaButtons }) => {
   return (
-    <section className="relative overflow-hidden text-white bg-tasto-blue">
-      <PageContainer className="relative lg:py-16">
+    <section className="relative overflow-hidden bg-tasto-bg text-tasto-white">
+      <GridPattern />
+      <AmbientGlows withAccents />
+      <PageContainer className="relative pb-12 pt-24 sm:pb-16 sm:pt-28 lg:pb-24">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           {/* LEFT CONTENT */}
-          <div className="max-w-2xl text-center md:text-start">
+          <div className="relative z-10 max-w-2xl text-center md:text-start">
             {/* Eyebrow */}
-            {eyebrow && (
-              <div className="mb-6 inline-flex items-center rounded-full border border-white/10 bg-white/3 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-tasto-cyan backdrop-blur-sm">
-                {eyebrow}
-              </div>
-            )}
+            {eyebrow && <Eyebrow className="mb-8">{eyebrow}</Eyebrow>}
 
             {/* Heading */}
-            <h1 className="max-w-3xl text-5xl font-black leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl flex flex-col items-center md:items-start">
+            <GradientText
+              as="h1"
+              className="flex max-w-3xl flex-col items-center text-5xl font-black leading-[1.05] tracking-tight md:items-start md:text-6xl lg:text-7xl"
+            >
               {formatHeading(heading)}
-            </h1>
+            </GradientText>
 
             {/* Subtext */}
             {subtext && (
-              <p className="mt-8 md:max-w-xl text-lg leading-relaxed text-white/70 lg:text-xl text-center md:text-start">
+              <p className="mt-8 text-center text-lg leading-relaxed text-tasto-white/60 md:max-w-xl md:text-start lg:text-xl">
                 {subtext}
               </p>
             )}
@@ -71,18 +76,19 @@ export const HeroBlock: React.FC<HeroType> = ({ eyebrow, heading, subtext, ctaBu
                       asChild
                       size="lg"
                       variant={isPrimary ? "default" : "outline"}
-                      className={`group h-12 rounded-xl px-8 text-sm font-medium transition-all ${
+                      className={`group relative h-12 overflow-hidden rounded-xl px-8 text-sm font-medium transition-all duration-300 ${
                         isPrimary
-                          ? "border border-tasto-cyan bg-tasto-cyan/10 text-tasto-cyan hover:bg-tasto-cyan/80"
-                          : "border border-white/10 bg-white/3 text-white hover:bg-white/5"
+                          ? "border border-tasto-cyan/50 bg-tasto-cyan/10 text-tasto-cyan shadow-[0_0_20px_-5px_rgba(var(--tasto-cyan-rgb,0,255,255),0.3)] hover:bg-tasto-cyan/20 hover:shadow-[0_0_25px_-2px_rgba(var(--tasto-cyan-rgb,0,255,255),0.5)]"
+                          : "border border-tasto-white/10 bg-tasto-white/5 text-tasto-white hover:border-tasto-white/20 hover:bg-tasto-white/10"
                       }`}
                     >
                       <Link href={button.link || "#"}>
-                        {button.label}
-
-                        {isPrimary && (
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                        )}
+                        <span className="relative z-10 flex items-center">
+                          {button.label}
+                          {isPrimary && (
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                          )}
+                        </span>
                       </Link>
                     </Button>
                   );
@@ -91,56 +97,76 @@ export const HeroBlock: React.FC<HeroType> = ({ eyebrow, heading, subtext, ctaBu
             )}
           </div>
 
-          {/* RIGHT VISUAL */}
-          <div className="relative pointer-events-none select-none">
-            {/* Main Dashboard Card */}
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/3 p-6 shadow-2xl backdrop-blur-xl">
-              {/* Top Bar */}
-              <div className="mb-6 flex flex-col md:flex-row text-center md:text-start gap-2 items-center justify-between border-b border-white/10 pb-4">
-                <div>
-                  <p className="text-sm text-white/50">Governance Overview</p>
+          {/* RIGHT VISUAL - PREMIUM DASHBOARD */}
+          <div className="pointer-events-none relative select-none">
+            {/* Dashboard Container Wrapper for Hover Effects */}
+            <div className="group relative transition-transform duration-700 hover:-translate-y-2">
+              {/* Outer Glow on Hover */}
+              <div className="absolute -inset-1 rounded-[2.5rem] bg-linear-to-r from-tasto-cyan/0 via-tasto-cyan/10 to-tasto-cyan/0 opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100" />
 
-                  <h3 className="mt-1 text-xl font-semibold text-white">
-                    Operational Control Center
-                  </h3>
+              {/* Main Dashboard Card */}
+              <div className="relative overflow-hidden rounded-[2rem] border border-tasto-white/10 bg-linear-to-b from-tasto-white/[0.06] to-tasto-white/[0.01] p-8 shadow-2xl backdrop-blur-2xl">
+                {/* Top Edge Highlight */}
+                <div className="absolute inset-x-0 top-0 h-px w-full bg-linear-to-r from-transparent via-tasto-white/30 to-transparent opacity-40 transition-opacity duration-500 group-hover:opacity-100" />
+
+                {/* Top Bar */}
+                <div className="mb-8 flex flex-col items-center text-center justify-between gap-4 border-b border-tasto-white/5 pb-6 md:flex-row md:items-start md:text-start">
+                  <div className="flex flex-col items-center md:items-start">
+                    <div className="flex items-center gap-2 text-sm text-tasto-white/40">
+                      <Activity className="h-4 w-4 text-tasto-cyan/70 text-center md:text-start" />
+                      Governance Overview
+                    </div>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-tight text-tasto-white">
+                      Operational Control Center
+                    </h3>
+                  </div>
+
+                  {/* Premium Status Badge */}
+                  <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-400 shadow-[0_0_15px_-3px_rgba(16,185,129,0.2)] backdrop-blur-md">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                    </span>
+                    System Healthy
+                  </div>
                 </div>
 
-                <div className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-                  System Healthy
-                </div>
-              </div>
-
-              {/* Metrics */}
-              <div className="grid gap-4 md:grid-cols-2">
-                <DashboardMetric title="Active Projects" value="148" change="+12%" />
-
-                <DashboardMetric title="Monthly Revenue" value="$284K" change="+18%" />
-
-                <DashboardMetric title="Client Retention" value="96%" change="+4%" />
-
-                <DashboardMetric title="Governance Score" value="92/100" change="+8%" />
-              </div>
-
-              {/* Module Flow */}
-              <div className="mt-6 rounded-2xl border border-white/10 bg-tasto-blue/2 p-5">
-                <div className="mb-4 flex flex-col md:flex-row text-center md:text-start gap-2 items-center justify-between">
-                  <h4 className="text-sm font-medium text-white">Connected Business Flow</h4>
-
-                  <div className="text-xs text-tasto-cyan">Live Synchronization</div>
+                {/* Metrics Grid */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <DashboardMetric title="Active Projects" value="148" change="+12%" />
+                  <DashboardMetric title="Monthly Revenue" value="$284K" change="+18%" />
+                  <DashboardMetric title="Client Retention" value="96%" change="+4%" />
+                  <DashboardMetric title="Governance Score" value="92/100" change="+8%" />
                 </div>
 
-                <div className="flex flex-col md:flex-row flex-wrap items-center gap-2 text-xs">
-                  {["Contracts", "Projects", "Billing", "Finance", "Analytics"].map((item) => (
-                    <React.Fragment key={item}>
-                      <div className="rounded-lg border border-white/10 bg-white/3 px-3 py-2 text-white/80">
-                        {item}
-                      </div>
+                {/* Module Flow - Pipeline Style */}
+                <div className="mt-8 rounded-2xl border border-tasto-white/5 bg-tasto-white/2 p-6 shadow-inner">
+                  <div className="mb-5 flex flex-col items-center justify-between gap-2 md:flex-row md:text-start">
+                    <h4 className="text-sm font-medium text-tasto-white/80">
+                      Connected Business Flow
+                    </h4>
+                    <div className="flex items-center gap-2 rounded-lg bg-tasto-cyan/10 px-2.5 py-1 text-xs font-medium text-tasto-cyan">
+                      <div className="h-1.5 w-1.5 rounded-full bg-tasto-cyan shadow-[0_0_5px_var(--tasto-cyan)]" />
+                      Live Sync
+                    </div>
+                  </div>
 
-                      {item !== "Analytics" && (
-                        <ArrowRight className="h-3 w-3 text-white/30 max-md:rotate-90" />
-                      )}
-                    </React.Fragment>
-                  ))}
+                  <div className="flex flex-col items-center gap-3 text-xs md:flex-row md:flex-wrap">
+                    {["Contracts", "Projects", "Billing", "Finance", "Analytics"].map((item) => (
+                      <React.Fragment key={item}>
+                        <div className="relative overflow-hidden rounded-xl border border-tasto-white/10 bg-linear-to-br from-tasto-white/5 to-transparent px-4 py-2.5 text-tasto-white/70 transition-colors duration-300 group-hover:border-tasto-cyan/20 group-hover:text-tasto-white">
+                          {item}
+                        </div>
+
+                        {item !== "Analytics" && (
+                          <div className="flex items-center text-tasto-white/20 transition-colors duration-300 group-hover:text-tasto-cyan/50 max-md:rotate-90">
+                            <div className="h-px w-3 bg-current" />
+                            <ArrowRight className="h-3 w-3 -ml-1" />
+                          </div>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -159,13 +185,18 @@ interface DashboardMetricProps {
 
 const DashboardMetric: React.FC<DashboardMetricProps> = ({ title, value, change }) => {
   return (
-    <div className="rounded-2xl border border-white/10 bg-tasto-blue/2 p-5 text-center md:text-start">
-      <p className="text-sm text-white/50">{title}</p>
+    <div className="group/metric rounded-2xl border border-tasto-white/3 bg-tasto-white/2 p-5 text-center transition-colors duration-300 hover:border-tasto-white/8 hover:bg-tasto-white/4 md:text-start">
+      <p className="text-sm font-medium text-tasto-white/40">{title}</p>
 
-      <div className="mt-3 flex flex-col items-center gap-2 md:items-end md:flex-row justify-between">
-        <h4 className="text-2xl font-bold text-white">{value}</h4>
+      <div className="mt-4 flex flex-col items-center justify-between gap-2 md:flex-row md:items-end">
+        <h4 className="text-3xl font-bold tracking-tight text-tasto-white drop-shadow-md">
+          {value}
+        </h4>
 
-        <span className="text-sm font-medium text-emerald-400">{change}</span>
+        <div className="flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-xs font-semibold text-emerald-400">
+          <Activity className="h-3 w-3" />
+          {change}
+        </div>
       </div>
     </div>
   );

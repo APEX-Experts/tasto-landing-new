@@ -63,12 +63,18 @@ export function Logo({
   alt,
   logoImage,
   logoSvg,
-  width = 30,
-  height = 30,
+  width,
+  height,
   className,
   logoOnly = false,
 }: LogoProps) {
   const imageAlt = alt || (typeof brandName === "string" ? brandName : "Logo");
+
+  const isSvgString = typeof logoSvg === "string";
+  const defaultWidth = logoImage || isSvgString ? 30 : undefined;
+  const defaultHeight = logoImage || isSvgString ? 30 : undefined;
+  const logoWidth = width ?? defaultWidth;
+  const logoHeight = height ?? defaultHeight;
 
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
@@ -76,25 +82,21 @@ export function Logo({
         <Image
           src={logoImage}
           alt={imageAlt}
-          width={width}
-          height={height}
+          width={logoWidth ?? 30}
+          height={logoHeight ?? 30}
           className="object-contain"
           priority
         />
       ) : logoSvg ? (
         <div
           className="flex items-center justify-center shrink-0 [&>svg]:w-full [&>svg]:h-full [&>svg]:fill-current"
-          style={{ width, height }}
-          {...(typeof logoSvg === "string"
+          style={logoWidth && logoHeight ? { width: logoWidth, height: logoHeight } : undefined}
+          {...(isSvgString
             ? { dangerouslySetInnerHTML: { __html: logoSvg } }
             : { children: logoSvg })}
         />
       ) : (
-        brandName && (
-          <span className="font-bold tracking-tight text-foreground">
-            {logoOnly ? "AE" : brandName}
-          </span>
-        )
+        brandName && <span className="font-bold tracking-tight">{logoOnly ? "AE" : brandName}</span>
       )}
     </div>
   );
