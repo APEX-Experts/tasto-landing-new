@@ -1,8 +1,10 @@
+// src/payload/blocks/Hero.ts
+
 import { Block } from "payload";
 
 /**
- * Payload CMS Block configuration for the Hero section.
- * Includes fields for heading, subtext, background image, and call-to-action buttons.
+ * Hero Block
+ * Enterprise-focused hero section for the TASTO landing page.
  */
 export const Hero: Block = {
   slug: "hero",
@@ -12,23 +14,31 @@ export const Hero: Block = {
   },
   fields: [
     {
+      name: "eyebrow",
+      type: "text",
+      defaultValue: "Business Operating & Governance Platform",
+      admin: {
+        description: "Small label shown above the main heading.",
+      },
+    },
+    {
       name: "heading",
       type: "text",
       required: true,
+      admin: {
+        description: "The word 'TASTO' will automatically receive the custom brand styling.",
+      },
     },
     {
       name: "subtext",
       type: "textarea",
-    },
-    {
-      name: "backgroundImage",
-      type: "upload",
-      relationTo: "media",
       required: true,
     },
     {
       name: "ctaButtons",
       type: "array",
+      minRows: 1,
+      maxRows: 2,
       fields: [
         {
           name: "label",
@@ -45,8 +55,14 @@ export const Hero: Block = {
           type: "select",
           defaultValue: "primary",
           options: [
-            { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
+            {
+              label: "Primary",
+              value: "primary",
+            },
+            {
+              label: "Secondary",
+              value: "secondary",
+            },
           ],
         },
       ],

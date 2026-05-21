@@ -1,7 +1,6 @@
 import "@/app/globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryProvider } from "@/providers/query-provider";
-import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Geist } from "next/font/google";
@@ -26,7 +25,7 @@ export const metadata: Metadata = {
 
 /**
  * Root layout component for the main application group.
- * Handles global providers (Theme, Query), fonts, and global UI elements like Toaster.
+ * Handles global providers (Query), fonts, and global UI elements like Toaster.
  *
  * @param props - Component props containing children elements.
  */
@@ -42,19 +41,12 @@ export default function MainLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <QueryProvider>
-            <TooltipProvider>
-              {children}
-              <Toaster />
-            </TooltipProvider>
-          </QueryProvider>
-        </ThemeProvider>
+        <QueryProvider>
+          <TooltipProvider>
+            {children}
+            <Toaster />
+          </TooltipProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -51,7 +51,7 @@ async function seed() {
           blockType: "hero",
           heading: "Welcome to our Premium Template",
           subtext: "Experience the power of Payload CMS and Next.js combined.",
-          backgroundImage: media.id,
+          eyebrow: "Premium Template",
           ctaButtons: [
             {
               label: "Get Started",

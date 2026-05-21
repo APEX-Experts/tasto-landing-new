@@ -1,4 +1,5 @@
 import { Footer } from "@/components/landing/layout/footer";
+import { FullLogo } from "@/components/landing/layout/full-logo";
 import { Navbar } from "@/components/landing/layout/navbar";
 import { Button } from "@/components/ui/button";
 import { getPayload } from "@/lib/cms/getPayload";
@@ -61,7 +62,7 @@ export default async function LandingLayout({
       {/* Global Navbar */}
       <Navbar
         brandName={header.brandName}
-        logoSvg={header.logoSvg || undefined}
+        logoSvg={header.logoSvg || <FullLogo className="text-2xl" />}
         routes={navRoutes}
         actionSlot={
           header.actionButton?.isEnabled ? (
@@ -75,7 +76,7 @@ export default async function LandingLayout({
       {/* Global Footer */}
       <Footer
         brandName={footer.brandName}
-        logoSvg={footer.logoSvg || undefined}
+        logoSvg={footer.logoSvg || <FullLogo className="text-4xl" />}
         description={footer.description || undefined}
         socialLinks={footerSocialLinks}
         columns={footerColumns}

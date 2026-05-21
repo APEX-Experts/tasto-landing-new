@@ -9,7 +9,7 @@ import { RenderBlocks } from "@/components/landing/blocks/RenderBlocks";
 type Props = {
   /** The route parameters including the page slug */
   params: Promise<{
-    slug: string;
+    slug?: string[];
   }>;
 };
 
@@ -28,7 +28,7 @@ export async function generateStaticParams() {
   });
 
   return pages.docs.map(({ slug }) => ({
-    slug,
+    slug: slug === "home" ? [] : slug.split("/"),
   }));
 }
 
@@ -36,7 +36,9 @@ export async function generateStaticParams() {
  * Generates dynamic metadata for the page based on Payload CMS content.
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const resolvedParams = await params;
+
+  const slug = resolvedParams.slug?.join("/") || "home";
   const payload = await getPayload();
 
   const result = await payload.find({
@@ -64,7 +66,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  * Dynamic route component that fetches and displays a page by its slug from Payload CMS.
  */
 export default async function Page({ params }: Props) {
-  const { slug } = await params;
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug?.join("/") || "home";
+
   const payload = await getPayload();
 
   const result = await payload.find({

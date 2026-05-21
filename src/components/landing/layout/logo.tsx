@@ -89,12 +89,12 @@ export function Logo({
             ? { dangerouslySetInnerHTML: { __html: logoSvg } }
             : { children: logoSvg })}
         />
-      ) : null}
-
-      {brandName && (
-        <span className="font-bold tracking-tight text-foreground">
-          {logoOnly ? "AE" : brandName}
-        </span>
+      ) : (
+        brandName && (
+          <span className="font-bold tracking-tight text-foreground">
+            {logoOnly ? "AE" : brandName}
+          </span>
+        )
       )}
     </div>
   );
