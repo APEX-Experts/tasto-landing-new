@@ -69,6 +69,7 @@ export interface Config {
     hero: Hero;
     features: Features;
     cta: Cta;
+    'problem-section': ProblemSection;
   };
   collections: {
     users: User;
@@ -214,6 +215,23 @@ export interface Cta {
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "problem-section".
+ */
+export interface ProblemSection {
+  eyebrow?: string | null;
+  heading: string;
+  description: string;
+  problems: {
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'problem-section';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -363,6 +381,19 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'cta';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        description: string;
+        problems: {
+          title: string;
+          description: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'problem-section';
       }
   )[];
   updatedAt: string;
@@ -601,6 +632,22 @@ export interface PagesSelect<T extends boolean = true> {
               text?: T;
               buttonLabel?: T;
               buttonLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'problem-section'?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              problems?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };

@@ -15,6 +15,7 @@ import { s3Storage } from "@payloadcms/storage-s3";
 import { Hero } from "./payload/blocks/Hero.ts";
 import { Features } from "./payload/blocks/Features.ts";
 import { CTA } from "./payload/blocks/CTA.ts";
+import { ProblemSection } from "./payload/blocks/ProblemSection.ts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -63,5 +64,5 @@ export default buildConfig({
         ]
       : []),
   ],
-  blocks: [Hero, Features, CTA],
+  blocks: [Hero, Features, CTA, ProblemSection],
 });
