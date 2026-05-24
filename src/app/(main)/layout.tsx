@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Geist } from "next/font/google";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const neuroxa = localFont({
   src: "../fonts/Neuroxa.ttf",
@@ -45,6 +46,7 @@ export default function MainLayout({
           <TooltipProvider>
             {children}
             <Toaster />
+            <Analytics />
           </TooltipProvider>
         </QueryProvider>
       </body>
