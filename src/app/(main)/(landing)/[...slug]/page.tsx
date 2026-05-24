@@ -16,7 +16,7 @@ export const revalidate = 60;
 type Props = {
   /** The route parameters including the page slug */
   params: Promise<{
-    slug?: string[];
+    slug: string[];
   }>;
 };
 
@@ -34,9 +34,12 @@ export async function generateStaticParams() {
     },
   });
 
-  return pages.docs.map(({ slug }) => ({
-    slug: slug === "home" ? [] : slug.split("/"),
-  }));
+  // Filter out 'home' so it doesn't clash with app/page.tsx
+  return pages.docs
+    .filter(({ slug }) => slug !== "home")
+    .map(({ slug }) => ({
+      slug: slug.split("/"),
+    }));
 }
 
 /**
@@ -45,7 +48,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
 
-  const slug = resolvedParams.slug?.join("/") || "home";
+  const slug = resolvedParams.slug?.join("/");
   const payload = await getPayload();
 
   const result = await payload.find({
