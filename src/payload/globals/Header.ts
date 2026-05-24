@@ -19,7 +19,7 @@ export const Header: GlobalConfig = {
       name: "brandName",
       type: "text",
       required: true,
-      defaultValue: "APEX Experts",
+      defaultValue: "TASTO",
     },
     {
       name: "logoSvg",

@@ -67,8 +67,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${page.title} | APEX Experts`,
-    description: `View ${page.title} on APEX Experts.`,
+    title: `${page.title} | TASTO`,
+    description: `View ${page.title} on TASTO.`,
   };
 }
 

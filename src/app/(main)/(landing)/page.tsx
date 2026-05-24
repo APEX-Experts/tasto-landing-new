@@ -17,8 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!page) return {};
 
   return {
-    title: `${page.title} | APEX Experts`,
-    description: `View ${page.title} on APEX Experts.`,
+    title: `${page.title} | TASTO`,
+    description: `View ${page.title} on TASTO.`,
   };
 }
 
