@@ -45,7 +45,7 @@ export const ContactHeroBlock: React.FC<ContactHeroType> = ({ eyebrow, heading, 
           <SectionHeading variant="dark" as="h1" className="max-w-5xl">
             <BrandText
               text={heading}
-              logoClassName="lg:mr-4 max-sm:mt-4"
+              logoClassName="lg:mr-4 max-sm:mt-4 text-white"
               spanClassName="bg-white/80"
             />
           </SectionHeading>
