@@ -1,6 +1,6 @@
 "use server";
 
-import sgMail from "@sendgrid/mail";
+import nodemailer from "nodemailer";
 
 export interface SendInquiryParams {
   fullName: string;
@@ -10,18 +10,16 @@ export interface SendInquiryParams {
 }
 
 export async function sendInquiryAction(data: SendInquiryParams) {
-  const fromEmail = process.env.MAIL_FROM;
-  const apiKey = process.env.SENDGRID_API_KEY;
-  const toEmail = process.env.MAIL_TO;
+  const host = process.env.EMAIL_HOST;
+  const port = process.env.EMAIL_PORT;
+  const secure = process.env.EMAIL_SECURE;
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+  const toEmail = process.env.EMAIL_TO;
 
-  if (!apiKey) {
-    console.error("SENDGRID_API_KEY is not configured");
+  if (!host || !port || !user || !pass) {
+    console.error("Email SMTP configuration is missing");
     return { success: false, error: "Email configuration is missing." };
-  }
-
-  if (!fromEmail) {
-    console.error("MAIL_FROM is not configured");
-    return { success: false, error: "Sender email configuration is missing." };
   }
 
   const { fullName, workEmail, company, inquiryDetails } = data;
@@ -31,9 +29,9 @@ export async function sendInquiryAction(data: SendInquiryParams) {
     return { success: false, error: "All fields are required." };
   }
 
-  const msg = {
-    to: toEmail, // The admin receives the inquiry
-    from: fromEmail, // SendGrid requires this to be a verified sender
+  const mailOptions = {
+    from: `"Tasto Cloud" <${user}>`, // Admin/system email is the sender
+    to: toEmail || "admin@apexexperts.net", // The admin receives the inquiry
     replyTo: workEmail, // Admin can reply directly to the sender
     subject: `New Enterprise Inquiry from ${company}`,
     text: `
@@ -70,12 +68,21 @@ ${inquiryDetails}
   };
 
   try {
-    sgMail.setApiKey(apiKey);
-    await sgMail.send(msg);
+    const transporter = nodemailer.createTransport({
+      host,
+      port: parseInt(port, 10),
+      secure: secure === "true",
+      auth: {
+        user,
+        pass,
+      },
+    });
+
+    await transporter.sendMail(mailOptions);
     return { success: true };
   } catch (error: unknown) {
-    const err = error as { message?: string; response?: { body?: unknown } };
-    console.error("SendGrid error detailed:", err.response?.body || err);
+    const err = error as Error;
+    console.error("Nodemailer error detailed:", err);
     return {
       success: false,
       error: err.message || "Failed to send email. Please try again later.",
